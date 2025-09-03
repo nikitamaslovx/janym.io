@@ -111,42 +111,6 @@ EOF
 echo -e "${GREEN}✅ .env file created successfully!${NC}"
 echo ""
 
-# Update docker-compose.yml with new credentials
-echo -e "${GREEN}🔧 Updating docker-compose.yml with new credentials...${NC}"
-
-# Decide sed -i flavor (GNU/BusyBox vs BSD/macOS)
-if command -v gsed >/dev/null 2>&1; then
-  SED=gsed; SED_I=(-i)               # Homebrew gsed on macOS
-elif sed --version >/dev/null 2>&1; then
-  SED=sed;  SED_I=(-i)               # GNU sed (Linux, WSL)
-elif sed --help 2>&1 | grep -qi busybox; then
-  SED=sed;  SED_I=(-i)               # BusyBox sed (Alpine)
-else
-  SED=sed;  SED_I=(-i '')            # BSD sed (macOS default)
-fi
-
-# Escape &, /, and backslashes in replacement text
-escape_sed_repl() { printf '%s' "$1" | "$SED" -e 's/[\/&\\]/\\&/g'; }
-
-user_esc=$(escape_sed_repl "$USERNAME")
-pass_esc=$(escape_sed_repl "$PASSWORD")
-
-if [ -f "docker-compose.yml" ]; then
-    # Create a backup of the original file
-    cp docker-compose.yml docker-compose.yml.backup
-    
-    # Anchor to start (^) so only the intended key lines are replaced
-    "$SED" "${SED_I[@]}" "s|^BACKEND_API_USERNAME=.*|BACKEND_API_USERNAME=$user_esc|" docker-compose.yml
-    "$SED" "${SED_I[@]}" "s|^BACKEND_API_PASSWORD=.*|BACKEND_API_PASSWORD=$pass_esc|" docker-compose.yml
-    
-    echo -e "${GREEN}✅ docker-compose.yml updated successfully!${NC}"
-    echo -e "${BLUE}📋 Updated credentials:${NC} Username: $USERNAME, Password: $PASSWORD"
-else
-    echo -e "${YELLOW}⚠️  Warning: docker-compose.yml not found in current directory${NC}"
-fi
-
-echo ""
-
 # Display configuration summary
 echo -e "${BLUE}📋 Configuration Summary${NC}"
 echo "======================="
