@@ -1,0 +1,66 @@
+services:
+  emqx:
+    image: emqx/emqx:5.8.5
+    container_name: emqx
+    environment:
+      - EMQX_NODE_NAME=emqx@node1.emqx.io
+      - EMQX_CLUSTER__DISCOVERY_STRATEGY=static
+      - EMQX_DASHBOARD__DEFAULT_USERNAME=admin
+      - EMQX_DASHBOARD__DEFAULT_PASSWORD=public
+    ports:
+      - '1883:1883' # MQTT TCP
+      - '8083:8083' # MQTT Websocket
+      - '8883:8883' # MQTT SSL
+      - '8084:8084' # MQTT WSS
+      - '18083:18083' # Dashboard
+    volumes:
+      - emqx_data:/opt/emqx/data
+      - emqx_log:/opt/emqx/log
+    networks:
+      - janym-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - janym-network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hummingbot-gateway:
+    build:
+      context: ./services/hummingbot-gateway
+      dockerfile: Dockerfile
+    container_name: hummingbot-gateway
+    ports:
+      - '8000:8000'
+    environment:
+      - MQTT_BROKER_URL=emqx
+      - MQTT_PORT=1883
+      - MQTT_USERNAME=admin
+      - MQTT_PASSWORD=public
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - emqx
+    networks:
+      - janym-network
+    restart: unless-stopped
+
+volumes:
+  emqx_data:
+  emqx_log:
+  redis_data:
+
+networks:
+  janym-network:
+    name: janym-network
+    driver: bridge

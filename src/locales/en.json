@@ -108,6 +108,8 @@
   "DashboardLayout": {
     "home": "Home",
     "strategies": "Strategies",
+    "portfolio": "Portfolio",
+    "exchanges": "Exchanges",
     "todos": "Todos",
     "members": "Members",
     "billing": "Billing",
@@ -198,5 +200,72 @@
   "BalanceChart": {
     "title": "Total Balance",
     "description": "Your portfolio value over time (USD)"
+  },
+  "BotConfigForm": {
+    "name_label": "Bot Name",
+    "name_placeholder": "My Trading Bot",
+    "name_description": "A descriptive name for your bot",
+    "strategy_type_label": "Strategy Type",
+    "strategy_type_placeholder": "Select a strategy",
+    "strategy_type_description": "Choose the trading strategy for this bot",
+    "exchange_label": "Exchange",
+    "exchange_placeholder": "Select an exchange",
+    "exchange_description": "The exchange where this bot will trade",
+    "trading_pair_label": "Trading Pair",
+    "trading_pair_description": "The trading pair (e.g., BTC-USDT)",
+    "create_button": "Create Bot",
+    "update_button": "Update Bot",
+    "cancel_button": "Cancel",
+    "saving": "Saving..."
+  },
+  "BotDashboard": {
+    "meta_title": "Bot Dashboard",
+    "meta_description": "View bot details and metrics",
+    "title": "Bot Dashboard",
+    "description": "Monitor bot performance and manage settings",
+    "metrics_title": "Performance Metrics",
+    "metrics_chart_title": "Balance & PnL",
+    "metrics_chart_description": "Bot performance over time",
+    "orders_title": "Recent Orders"
+  },
+  "PortfolioOverview": {
+    "title": "Portfolio Overview",
+    "description": "Your complete trading portfolio",
+    "total_balance": "Total Balance",
+    "total_pnl": "Total P&L",
+    "total_bots": "Total Bots",
+    "active": "active",
+    "exchanges": "Exchanges",
+    "connected": "connected",
+    "by_exchange_title": "Balance by Exchange",
+    "by_exchange_description": "Distribution across exchanges",
+    "by_strategy_title": "Balance by Strategy",
+    "by_strategy_description": "Distribution across strategies"
+  },
+  "CredentialsManager": {
+    "title": "Exchange Credentials",
+    "description": "Manage API keys for exchanges",
+    "add_button": "Add Credentials",
+    "add_credentials_title": "Add Exchange Credentials",
+    "add_credentials_description": "Enter your API keys securely",
+    "validate_button": "Validate",
+    "delete_button": "Delete"
+  },
+  "CredentialForm": {
+    "exchange_label": "Exchange",
+    "exchange_placeholder": "Select exchange",
+    "exchange_description": "Choose the exchange",
+    "api_key_label": "API Key",
+    "api_key_placeholder": "Enter API key",
+    "api_key_description": "Your exchange API key",
+    "api_secret_label": "API Secret",
+    "api_secret_placeholder": "Enter API secret",
+    "api_secret_description": "Your exchange API secret",
+    "passphrase_label": "Passphrase",
+    "passphrase_placeholder": "Enter passphrase (if required)",
+    "passphrase_description": "Passphrase for some exchanges",
+    "save_button": "Save",
+    "cancel_button": "Cancel",
+    "saving": "Saving..."
   }
 }

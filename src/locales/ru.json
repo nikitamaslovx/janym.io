@@ -113,6 +113,8 @@
   "DashboardLayout": {
     "home": "Главная",
     "strategies": "Стратегии",
+    "portfolio": "Портфель",
+    "exchanges": "Биржи",
     "todos": "Задачи",
     "members": "Участники",
     "billing": "Биллинг",
@@ -129,7 +131,9 @@
     "message_state_description": "Вы можете настроить эту страницу в файле <code>dashboard/page.tsx</code>",
     "message_state_button": "Star on GitHub",
     "message_state_alternative": "Нужны дополнительные функции? Попробуйте Pro версию.",
-    "max_message": "Или self-hosted версию."
+    "max_message": "Или self-hosted версию.",
+    "header_title": "Обзор аккаунта",
+    "header_description": "Статистика и аналитика по вашим торговым ботам."
   },
   "UserProfile": {
     "title_bar": "Профиль пользователя",
@@ -203,5 +207,72 @@
   "BalanceChart": {
     "title": "Общий Баланс",
     "description": "Стоимость вашего портфеля (USD)"
+  },
+  "BotConfigForm": {
+    "name_label": "Название Бота",
+    "name_placeholder": "Мой Торговый Бот",
+    "name_description": "Описательное название для вашего бота",
+    "strategy_type_label": "Тип Стратегии",
+    "strategy_type_placeholder": "Выберите стратегию",
+    "strategy_type_description": "Выберите торговую стратегию для этого бота",
+    "exchange_label": "Биржа",
+    "exchange_placeholder": "Выберите биржу",
+    "exchange_description": "Биржа, на которой будет торговать этот бот",
+    "trading_pair_label": "Торговая Пара",
+    "trading_pair_description": "Торговая пара (например, BTC-USDT)",
+    "create_button": "Создать Бота",
+    "update_button": "Обновить Бота",
+    "cancel_button": "Отмена",
+    "saving": "Сохранение..."
+  },
+  "BotDashboard": {
+    "meta_title": "Панель Бота",
+    "meta_description": "Просмотр деталей и метрик бота",
+    "title": "Панель Бота",
+    "description": "Мониторинг производительности и управление настройками",
+    "metrics_title": "Метрики Производительности",
+    "metrics_chart_title": "Баланс и P&L",
+    "metrics_chart_description": "Производительность бота во времени",
+    "orders_title": "Последние Ордера"
+  },
+  "PortfolioOverview": {
+    "title": "Обзор Портфеля",
+    "description": "Ваш полный торговый портфель",
+    "total_balance": "Общий Баланс",
+    "total_pnl": "Общая Прибыль/Убыток",
+    "total_bots": "Всего Ботов",
+    "active": "активных",
+    "exchanges": "Биржи",
+    "connected": "подключено",
+    "by_exchange_title": "Баланс по Биржам",
+    "by_exchange_description": "Распределение по биржам",
+    "by_strategy_title": "Баланс по Стратегиям",
+    "by_strategy_description": "Распределение по стратегиям"
+  },
+  "CredentialsManager": {
+    "title": "Учетные Данные Бирж",
+    "description": "Управление API ключами для бирж",
+    "add_button": "Добавить Ключи",
+    "add_credentials_title": "Добавить Учетные Данные",
+    "add_credentials_description": "Введите ваши API ключи безопасно",
+    "validate_button": "Проверить",
+    "delete_button": "Удалить"
+  },
+  "CredentialForm": {
+    "exchange_label": "Биржа",
+    "exchange_placeholder": "Выберите биржу",
+    "exchange_description": "Выберите биржу",
+    "api_key_label": "API Ключ",
+    "api_key_placeholder": "Введите API ключ",
+    "api_key_description": "Ваш API ключ биржи",
+    "api_secret_label": "API Секрет",
+    "api_secret_placeholder": "Введите API секрет",
+    "api_secret_description": "Ваш API секрет биржи",
+    "passphrase_label": "Парольная Фраза",
+    "passphrase_placeholder": "Введите парольную фразу (если требуется)",
+    "passphrase_description": "Парольная фраза для некоторых бирж",
+    "save_button": "Сохранить",
+    "cancel_button": "Отмена",
+    "saving": "Сохранение..."
   }
 }

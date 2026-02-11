@@ -1,6 +1,7 @@
 'use client';
 
 import mqtt from 'mqtt';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
@@ -12,42 +13,45 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
-type BotStatus = 'running' | 'stopped' | 'error';
-
-type Bot = {
-  id: string;
-  name: string;
-  strategy: string;
-  pair: string;
-  status: BotStatus;
-};
+import type { Bot } from '@/types/bot';
 
 export const StrategyList = () => {
   const t = useTranslations('StrategyList');
-  const [bots, setBots] = useState<Bot[]>([
-    {
-      id: 'bot-1',
-      name: 'Binance BTC/USDT',
-      strategy: 'pure_market_making',
-      pair: 'BTC/USDT',
-      status: 'stopped',
-    },
-    {
-      id: 'bot-2',
-      name: 'KuCoin ETH/USDT',
-      strategy: 'cross_exchange_mining',
-      pair: 'ETH/USDT',
-      status: 'stopped',
-    },
-  ]);
+  const router = useRouter();
+  const [bots, setBots] = useState<Bot[]>([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Load bots from API
+  useEffect(() => {
+    const loadBots = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/bots');
+        if (!response.ok) {
+          throw new Error('Failed to load bots');
+        }
+        const data = await response.json();
+        setBots(data.bots || []);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading bots:', err);
+        setError('Failed to load bots');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadBots();
+  }, []);
+
+  // MQTT connection for real-time updates
   useEffect(() => {
     // Connect to EMQX via WebSockets
     const client = mqtt.connect('ws://localhost:8083/mqtt', {
       clientId: `janym_dashboard_${Math.random().toString(16).slice(2, 8)}`,
-      username: 'admin', // Use public/anonymous if configured, or specific dash user
+      username: 'admin',
       password: 'public',
     });
 
@@ -66,9 +70,9 @@ export const StrategyList = () => {
         const botId = topic.split('/')[1];
         const payload = JSON.parse(message.toString());
 
-        setBots(prevBots =>
-          prevBots.map(bot =>
-            bot.id === botId ? { ...bot, status: payload.status } : bot,
+        setBots((prevBots) =>
+          prevBots.map((bot) =>
+            bot.id === botId ? { ...bot, status: payload.status as Bot['status'] } : bot,
           ),
         );
       } catch (error) {
@@ -89,33 +93,75 @@ export const StrategyList = () => {
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
 
   const sendCommand = async (botId: string, action: 'start' | 'stop') => {
-    setLoadingMap(prev => ({ ...prev, [botId]: true }));
+    setLoadingMap((prev) => ({ ...prev, [botId]: true }));
     try {
-      const response = await fetch('/api/bot', {
+      const response = await fetch(`/api/bots/${botId}/commands`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ botId, action }),
+        body: JSON.stringify({ command: action }),
       });
 
       if (!response.ok) {
-        console.error('Failed to send command');
-        // Revert or show toast error
-        return;
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to send command');
       }
 
       // Optimistic update
-      setBots(prev =>
-        prev.map(b => (b.id === botId ? { ...b, status: action === 'start' ? 'running' : 'stopped' } : b)),
+      setBots((prev) =>
+        prev.map((b) =>
+          b.id === botId
+            ? { ...b, status: action === 'start' ? ('running' as const) : ('stopped' as const) }
+            : b,
+        ),
       );
     } catch (error) {
       console.error('Error sending command:', error);
+      alert(error instanceof Error ? error.message : 'Failed to send command');
     } finally {
-      setLoadingMap(prev => ({ ...prev, [botId]: false }));
+      setLoadingMap((prev) => ({ ...prev, [botId]: false }));
     }
   };
 
   const handleStartBot = (botId: string) => sendCommand(botId, 'start');
   const handleStopBot = (botId: string) => sendCommand(botId, 'stop');
+  const handleAddBot = () => {
+    router.push('/dashboard/strategies/new');
+  };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
+            <p className="text-muted-foreground">{t('description')}</p>
+          </div>
+        </div>
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">Loading bots...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
+            <p className="text-muted-foreground">{t('description')}</p>
+          </div>
+        </div>
+        <div className="text-center py-8">
+          <p className="text-destructive">{error}</p>
+          <Button onClick={() => window.location.reload()} className="mt-4">
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -137,20 +183,35 @@ export const StrategyList = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {bots.map(bot => (
+        {bots.map((bot) => (
           <Card key={bot.id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{bot.name}</CardTitle>
               <Badge
-                variant={bot.status === 'running' ? 'default' : 'destructive'}
+                variant={
+                  bot.status === 'running'
+                    ? 'default'
+                    : bot.status === 'error'
+                      ? 'destructive'
+                      : 'secondary'
+                }
               >
                 {bot.status}
               </Badge>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{bot.pair}</div>
-              <p className="text-xs text-muted-foreground">{bot.strategy}</p>
+              <div className="text-2xl font-bold">{bot.tradingPair}</div>
+              <p className="text-xs text-muted-foreground">{bot.strategyType}</p>
+              <p className="text-xs text-muted-foreground mt-1">{bot.exchange}</p>
               <div className="mt-4 flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => router.push(`/dashboard/strategies/${bot.id}`)}
+                >
+                  View
+                </Button>
                 <Button
                   size="sm"
                   className="w-full"
@@ -173,10 +234,12 @@ export const StrategyList = () => {
           </Card>
         ))}
 
-        {/* Add New Bot Card Placeholder */}
-        <Card className="flex flex-col items-center justify-center border-dashed py-10 opacity-70 hover:opacity-100">
+        {/* Add New Bot Card */}
+        <Card className="flex flex-col items-center justify-center border-dashed py-10 opacity-70 hover:opacity-100 cursor-pointer">
           <CardContent>
-            <Button variant="outline">{t('add_bot')}</Button>
+            <Button variant="outline" onClick={handleAddBot}>
+              {t('add_bot')}
+            </Button>
           </CardContent>
         </Card>
       </div>

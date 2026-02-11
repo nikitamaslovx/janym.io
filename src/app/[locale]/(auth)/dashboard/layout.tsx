@@ -32,6 +32,14 @@ export default function DashboardLayout(props: { children: React.ReactNode }) {
                 href: '/dashboard/strategies',
                 label: t('strategies'),
               },
+              {
+                href: '/dashboard/portfolio',
+                label: t('portfolio'),
+              },
+              {
+                href: '/dashboard/exchanges',
+                label: t('exchanges'),
+              },
               // PRO: Link to the /dashboard/todos page
               {
                 href: '/dashboard/organization-profile/organization-members',
