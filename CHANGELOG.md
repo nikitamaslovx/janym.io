@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/nikitamaslovx/janym.io/compare/v1.0.0...v1.1.0) (2026-02-11)
+
+
+### Features
+
+* customize landing page branding and content, add onboarding steps and FAQ ([acf296a](https://github.com/nikitamaslovx/janym.io/commit/acf296a39e43f2a6ab2380687e2186d46db1aca4))
+
 # 1.0.0 (2026-02-11)
 
 
