@@ -1,6 +1,6 @@
 import type { InferSelectModel } from 'drizzle-orm';
 
-import { botsSchema } from '@/models/Schema';
+import type { botsSchema } from '@/models/Schema';
 
 export type Bot = InferSelectModel<typeof botsSchema>;
 
@@ -14,17 +14,18 @@ export type StrategyType =
   | 'perpetual_market_making'
   | 'spot_perpetual_arbitrage'
   | 'liquidity_mining'
+  | 'v2'
   | 'custom';
 
-export interface BotConfig {
+export type BotConfig = {
   name: string;
   strategyType: StrategyType;
   exchange: string;
   tradingPair: string;
   config: Record<string, unknown>;
-}
+};
 
-export interface PureMarketMakingConfig {
+export type PureMarketMakingConfig = {
   bid_spread: number;
   ask_spread: number;
   order_amount: number;
@@ -32,22 +33,22 @@ export interface PureMarketMakingConfig {
   max_order_age?: number;
   inventory_skew_enabled?: boolean;
   inventory_target_base_pct?: number;
-}
+};
 
-export interface CrossExchangeMiningConfig {
+export type CrossExchangeMiningConfig = {
   maker_market: string;
   taker_market: string;
   maker_market_trading_pair: string;
   taker_market_trading_pair: string;
   min_profitability: number;
   order_amount: number;
-}
+};
 
-export interface BotCreateInput extends BotConfig {
+export type BotCreateInput = BotConfig & {
   organizationId: string;
-}
+};
 
-export interface BotUpdateInput extends Partial<BotConfig> {
+export type BotUpdateInput = Partial<BotConfig> & {
   id: string;
   organizationId: string;
-}
+};

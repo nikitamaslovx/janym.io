@@ -105,6 +105,43 @@ class DockerManager:
             print(f'Docker Manager: Error creating container {container_name}: {e}', flush=True)
             raise
 
+    async def run_backtest(self, bot_id: str, config: dict, start_date: str, end_date: str):
+        """Run a backtest in a temporary container"""
+        print(f'Docker Manager: Running backtest for bot {bot_id} from {start_date} to {end_date}', flush=True)
+        if not self.client:
+            raise RuntimeError('Docker client not initialized')
+
+        container_name = f'backtest_{bot_id}_{int(asyncio.get_event_loop().time())}'
+        
+        # Merge backtest params into config for the bridge client
+        bt_config = {
+            **config,
+            'backtest': 'true',
+            'backtest_start': start_date,
+            'backtest_end': end_date
+        }
+
+        try:
+            container = self.client.containers.run(
+                'janym-hummingbot',
+                name=container_name,
+                detach=True,
+                environment={
+                    'BOT_ID': f'BT_{bot_id}',
+                    'MQTT_BROKER': os.getenv('MQTT_BROKER_URL', 'emqx'),
+                    'MQTT_PORT': os.getenv('MQTT_PORT', '1883'),
+                    **{f'CONFIG_{k.upper()}': str(v) for k, v in bt_config.items()},
+                },
+                network_mode='janym-network',
+                remove=True, # Auto-remove after completion
+                mem_limit='2g',
+            )
+            print(f'Docker Manager: Backtest container {container_name} started (ID: {container.id})', flush=True)
+            return container.id
+        except Exception as e:
+            print(f'Docker Manager: Error starting backtest container {container_name}: {e}', flush=True)
+            raise
+
     async def stop_bot(self, bot_id: str, skip_order_cancellation: bool = False):
         """Stop a Hummingbot container"""
         if not self.client:
@@ -130,8 +167,11 @@ class DockerManager:
         await asyncio.sleep(2)
         await self.start_bot(bot_id, {})
 
-    async def update_bot_config(self, bot_id: str, config: dict):
-        """Update bot configuration (requires container restart)"""
+    async def update_bot_config(self, bot_id: str, config: dict, skip_restart: bool = False):
+        """Update bot configuration. If skip_restart is True, assumes internal bridge handles it."""
+        if skip_restart:
+            print(f'Docker Manager: Skipping restart for bot {bot_id} as requested (on-the-fly update)', flush=True)
+            return
         await self.restart_bot(bot_id)
 
     async def list_containers(self) -> List[dict]:

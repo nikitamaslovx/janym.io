@@ -14,6 +14,7 @@ export const Env = createEnv({
     MQTT_PASSWORD: z.string().optional(),
     ENCRYPTION_KEY: z.string().min(32).optional(),
     REDIS_URL: z.string().optional(),
+    GATEWAY_URL: z.string().default('http://localhost:8000'),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().optional(),
@@ -37,6 +38,7 @@ export const Env = createEnv({
     MQTT_PASSWORD: process.env.MQTT_PASSWORD,
     ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
     REDIS_URL: process.env.REDIS_URL,
+    GATEWAY_URL: process.env.GATEWAY_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,

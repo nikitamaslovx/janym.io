@@ -10,8 +10,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
-from mqtt_bridge import MQTTBridge
 from docker_manager import DockerManager
+from mqtt_bridge import MQTTBridge
+from pydantic import BaseModel
 
 load_dotenv()
 
@@ -67,6 +68,37 @@ async def list_containers():
         return {'error': 'Docker manager not initialized'}
     containers = await docker_manager.list_containers()
     return {'containers': containers}
+
+
+class BacktestRequest(BaseModel):
+    config: dict
+    start_date: str
+    end_date: str
+
+
+@app.post('/bots/{bot_id}/backtest')
+async def run_bot_backtest(bot_id: str, request: BacktestRequest):
+    """Run a backtest for a bot"""
+    if not docker_manager:
+        return {'error': 'Docker manager not initialized', 'success': False}
+    
+    try:
+        container_id = await docker_manager.run_backtest(
+            bot_id, 
+            request.config, 
+            request.start_date, 
+            request.end_date
+        )
+        return {
+            'status': 'started', 
+            'container_id': container_id,
+            'success': True
+        }
+    except Exception as e:
+        return {
+            'error': str(e),
+            'success': False
+        }
 
 
 if __name__ == '__main__':

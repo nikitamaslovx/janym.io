@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -36,6 +36,7 @@ const strategyTypes: StrategyType[] = [
   'perpetual_market_making',
   'spot_perpetual_arbitrage',
   'liquidity_mining',
+  'v2',
   'custom',
 ];
 
@@ -68,20 +69,21 @@ const botFormSchema = z.object({
     'perpetual_market_making',
     'spot_perpetual_arbitrage',
     'liquidity_mining',
+    'v2',
     'custom',
   ]),
   exchange: z.string().min(1, 'Exchange is required'),
   tradingPair: z.string().min(1, 'Trading pair is required'),
-  config: z.record(z.unknown()).default({}),
+  config: z.unknown().default({}),
 });
 
 type BotFormValues = z.infer<typeof botFormSchema>;
 
-interface BotConfigFormProps {
+type BotConfigFormProps = {
   botId?: string;
   initialData?: Partial<BotFormValues>;
   onSuccess?: () => void;
-}
+};
 
 export const BotConfigForm = ({ botId, initialData, onSuccess }: BotConfigFormProps) => {
   const t = useTranslations('BotConfigForm');
@@ -99,9 +101,31 @@ export const BotConfigForm = ({ botId, initialData, onSuccess }: BotConfigFormPr
     },
   });
 
+  const strategyType = form.watch('strategyType');
+
+  // Handle local state for YAML config as string
+  const [yamlConfig, setYamlConfig] = React.useState(
+    strategyType === 'v2' && initialData?.config
+      ? JSON.stringify(initialData.config, null, 2)
+      : '',
+  );
+
   const onSubmit = async (data: BotFormValues) => {
     setIsSubmitting(true);
     try {
+      let finalConfig = data.config;
+
+      // For V2, parse the YAML/JSON string from the textarea
+      if (data.strategyType === 'v2' && yamlConfig) {
+        try {
+          // We use JSON.parse for now as a simple way to handle the textarea
+          // In a real app we might use a proper YAML parser
+          finalConfig = JSON.parse(yamlConfig);
+        } catch {
+          throw new Error('Invalid JSON configuration for V2 controllers');
+        }
+      }
+
       const url = botId ? `/api/bots/${botId}` : '/api/bots';
       const method = botId ? 'PUT' : 'POST';
 
@@ -110,7 +134,10 @@ export const BotConfigForm = ({ botId, initialData, onSuccess }: BotConfigFormPr
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          config: finalConfig,
+        }),
       });
 
       if (!response.ok) {
@@ -126,8 +153,6 @@ export const BotConfigForm = ({ botId, initialData, onSuccess }: BotConfigFormPr
       }
     } catch (error) {
       console.error('Error saving bot:', error);
-      // TODO: Show toast notification
-      alert(error instanceof Error ? error.message : 'Failed to save bot');
     } finally {
       setIsSubmitting(false);
     }
@@ -164,9 +189,9 @@ export const BotConfigForm = ({ botId, initialData, onSuccess }: BotConfigFormPr
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {strategyTypes.map((strategy) => (
+                  {strategyTypes.map(strategy => (
                     <SelectItem key={strategy} value={strategy}>
-                      {strategy.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                      {strategy.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -190,9 +215,9 @@ export const BotConfigForm = ({ botId, initialData, onSuccess }: BotConfigFormPr
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {exchanges.map((exchange) => (
+                  {exchanges.map(exchange => (
                     <SelectItem key={exchange} value={exchange}>
-                      {exchange.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                      {exchange.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -217,6 +242,21 @@ export const BotConfigForm = ({ botId, initialData, onSuccess }: BotConfigFormPr
             </FormItem>
           )}
         />
+
+        {strategyType === 'v2' && (
+          <div className="space-y-4 rounded-lg border bg-slate-50 p-4 dark:bg-slate-900">
+            <FormLabel>{t('v2_config_label')}</FormLabel>
+            <textarea
+              className="min-h-[200px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={yamlConfig}
+              onChange={e => setYamlConfig(e.target.value)}
+              placeholder='{ "controllers": [ { "controller_type": "market_making", ... } ] }'
+            />
+            <p className="text-[0.8rem] text-muted-foreground">
+              {t('v2_config_description')}
+            </p>
+          </div>
+        )}
 
         <div className="flex gap-4">
           <Button type="submit" disabled={isSubmitting}>

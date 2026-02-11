@@ -1,10 +1,10 @@
-import { eq, and } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
 import { botsSchema, organizationSchema } from '@/models/Schema';
 
-import type { Bot, BotCreateInput, BotUpdateInput } from './types';
 import { mqttService } from '../mqtt/MQTTService';
+import type { Bot, BotCreateInput, BotUpdateInput } from './types';
 
 export class BotService {
   async createBot(input: BotCreateInput): Promise<Bot> {
@@ -115,7 +115,10 @@ export class BotService {
 
     // Publish start command via MQTT
     await mqttService.publishCommand(botId, 'start', {
-      config: bot.config as Record<string, unknown>,
+      config: {
+        ...(bot.config as Record<string, unknown>),
+        strategy_type: bot.strategyType,
+      },
     });
   }
 
@@ -133,10 +136,41 @@ export class BotService {
     await this.updateBotStatus(botId, organizationId, 'stopped');
   }
 
+  async updateBotConfig(
+    botId: string,
+    organizationId: string,
+    config: Record<string, unknown>,
+  ): Promise<void> {
+    // Verify bot exists and belongs to organization
+    const bot = await this.getBot(botId, organizationId);
+    if (!bot) {
+      throw new Error('Bot not found or access denied');
+    }
+
+    // Update config in DB
+    await db
+      .update(botsSchema)
+      .set({
+        config,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(botsSchema.id, botId), eq(botsSchema.organizationId, organizationId)));
+
+    // For V2 strategies, we can reload on the fly
+    const remote_reload = bot.strategyType === 'v2';
+
+    // Publish config update via MQTT
+    await mqttService.publishCommand(botId, 'config/update', {
+      ...config,
+      strategy_type: bot.strategyType,
+      remote_reload,
+    } as any);
+  }
+
   async restartBot(botId: string, organizationId: string): Promise<void> {
     await this.stopBot(botId, organizationId);
     // Wait a bit before restarting
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     await this.startBot(botId, organizationId);
   }
 
@@ -152,6 +186,42 @@ export class BotService {
         updatedAt: new Date(),
       })
       .where(and(eq(botsSchema.id, botId), eq(botsSchema.organizationId, organizationId)));
+  }
+
+  async runBacktest(
+    botId: string,
+    organizationId: string,
+    startDate: string,
+    endDate: string,
+    configOverride?: Record<string, unknown>,
+  ): Promise<{ success: boolean; containerId?: string; error?: string }> {
+    const bot = await this.getBot(botId, organizationId);
+    if (!bot) {
+      throw new Error('Bot not found or access denied');
+    }
+
+    const config = configOverride || (bot.config as Record<string, unknown>);
+    const gatewayUrl = process.env.GATEWAY_URL || 'http://localhost:8000';
+
+    try {
+      const response = await fetch(`${gatewayUrl}/bots/${botId}/backtest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          config,
+          start_date: startDate,
+          end_date: endDate,
+        }),
+      });
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('BotService: Error starting backtest:', error);
+      return { success: false, error: 'Failed to connect to gateway' };
+    }
   }
 }
 

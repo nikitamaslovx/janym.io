@@ -199,3 +199,58 @@ export const botLogsSchema = pgTable(
     };
   },
 );
+
+export const tradesSchema = pgTable(
+  'trades',
+  {
+    id: serial('id').primaryKey(),
+    botId: uuid('bot_id')
+      .notNull()
+      .references(() => botsSchema.id, { onDelete: 'cascade' }),
+    market: text('market').notNull(),
+    symbol: text('symbol').notNull(),
+    baseAsset: text('base_asset').notNull(),
+    quoteAsset: text('quote_asset').notNull(),
+    orderType: text('order_type').notNull(),
+    tradeType: text('trade_type').notNull(),
+    price: decimal('price', { precision: 20, scale: 8 }).notNull(),
+    amount: decimal('amount', { precision: 20, scale: 8 }).notNull(),
+    exchangeTimestamp: timestamp('exchange_timestamp', { mode: 'date' }).notNull(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  },
+  (table) => {
+    return {
+      botIdExchangeTsIdx: index('trades_bot_id_exchange_ts_idx').on(
+        table.botId,
+        table.exchangeTimestamp,
+      ),
+    };
+  },
+);
+
+export const candlesSchema = pgTable(
+  'candles',
+  {
+    id: serial('id').primaryKey(),
+    exchange: text('exchange').notNull(),
+    symbol: text('symbol').notNull(),
+    interval: text('interval').notNull(), // '1m', '5m', '1h', etc.
+    timestamp: timestamp('timestamp', { mode: 'date' }).notNull(),
+    open: decimal('open', { precision: 20, scale: 8 }).notNull(),
+    high: decimal('high', { precision: 20, scale: 8 }).notNull(),
+    low: decimal('low', { precision: 20, scale: 8 }).notNull(),
+    close: decimal('close', { precision: 20, scale: 8 }).notNull(),
+    volume: decimal('volume', { precision: 20, scale: 8 }).notNull(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  },
+  (table) => {
+    return {
+      exchangeSymbolIntervalTsIdx: uniqueIndex('candles_exchange_symbol_interval_ts_idx').on(
+        table.exchange,
+        table.symbol,
+        table.interval,
+        table.timestamp,
+      ),
+    };
+  },
+);

@@ -4,15 +4,16 @@ USER root
 
 # Install dependencies into the hummingbot conda environment and system
 RUN apt-get update && apt-get install -y expect && rm -rf /var/lib/apt/lists/*
-RUN /opt/conda/bin/conda run -n hummingbot pip install --no-cache-dir paho-mqtt PyYAML
+RUN /opt/conda/bin/conda run -n hummingbot pip install --no-cache-dir paho-mqtt PyYAML psutil
 
 # Set up working directory
 WORKDIR /conf_mount
 WORKDIR /logs_mount
 WORKDIR /hummingbot
 
-# Copy our bridge and entrypoint
+# Copy our bridge, executor and entrypoint
 COPY mqtt_bridge_client.py /hummingbot/mqtt_bridge_client.py
+COPY v2_generic_executor.py /hummingbot/scripts/v2_generic_executor.py
 COPY entrypoint.sh /hummingbot/entrypoint.sh
 RUN chmod +x /hummingbot/entrypoint.sh
 

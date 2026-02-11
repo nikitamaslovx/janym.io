@@ -1,10 +1,8 @@
 import mqtt, { type MqttClient } from 'mqtt';
 
-import { Env } from '@/libs/Env';
-
 import type {
   BotCommand,
-  BotCommandMessage,
+  ConfigCommandPayload,
   MessageCallback,
   MQTTConnectionStatus,
   StartCommandPayload,
@@ -17,10 +15,10 @@ class MQTTService {
   private connectionStatus: MQTTConnectionStatus = {
     connected: false,
   };
+
   private subscribers: Map<string, Set<MessageCallback>> = new Map();
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 10;
-  private reconnectDelay = 5000;
 
   private getBrokerUrl(): string {
     // Use environment variable if available, otherwise default to localhost
@@ -104,7 +102,6 @@ class MQTTService {
         );
 
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-          // eslint-disable-next-line no-console
           console.error('MQTT Service: Max reconnect attempts reached');
           this.client?.end();
         }
@@ -116,7 +113,7 @@ class MQTTService {
     });
   }
 
-  private handleMessage(topic: string, message: Buffer) {
+  private handleMessage(topic: string, message: any) {
     // Find all matching subscribers
     for (const [pattern, callbacks] of this.subscribers.entries()) {
       if (this.topicMatches(pattern, topic)) {
@@ -189,7 +186,7 @@ class MQTTService {
   async publishCommand(
     botId: string,
     command: BotCommand,
-    payload?: StartCommandPayload | StopCommandPayload,
+    payload?: StartCommandPayload | StopCommandPayload | ConfigCommandPayload,
   ): Promise<void> {
     await this.ensureConnected();
 
@@ -221,10 +218,17 @@ class MQTTService {
         message = JSON.stringify(stopPayload);
         break;
       }
+      case 'config/update': {
+        topic = `hbot/${botId}/config/update`;
+        message = JSON.stringify(payload || {});
+        break;
+      }
       case 'restart': {
         // Restart is implemented as stop + start
         await this.publishCommand(botId, 'stop', payload);
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second
+        await new Promise((resolve) => {
+          setTimeout(resolve, 1000);
+        }); // Wait 1 second
         await this.publishCommand(botId, 'start', payload);
         return;
       }

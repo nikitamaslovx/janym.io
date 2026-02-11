@@ -110,7 +110,10 @@ class MQTTBridge:
     async def handle_config_update(self, bot_id: str, payload: dict):
         """Handle config update command"""
         try:
-            await self.docker_manager.update_bot_config(bot_id, payload)
+            # If payload has remote_reload=True, we don't restart the container
+            # as the internal bridge client will handle it on the fly.
+            skip_restart = payload.get('remote_reload', False)
+            await self.docker_manager.update_bot_config(bot_id, payload, skip_restart=skip_restart)
             self.publish_status(bot_id, 'running')
         except Exception as e:
             print(f'MQTT Bridge: Error updating config for bot {bot_id}: {e}')

@@ -2,8 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 import { botService } from '@/services/bot/BotService';
-import { metricsService } from '@/services/metrics/MetricsService';
-import type { Timeframe } from '@/types/metrics';
+import { tradeService } from '@/services/bot/TradeService';
 
 export async function GET(
   request: Request,
@@ -18,7 +17,7 @@ export async function GET(
 
     const { id } = await params;
     const { searchParams } = new URL(request.url);
-    const timeframe = (searchParams.get('timeframe') || '1d') as Timeframe;
+    const limit = Number.parseInt(searchParams.get('limit') || '50', 10);
 
     // Verify bot belongs to organization
     const bot = await botService.getBot(id, orgId);
@@ -26,19 +25,13 @@ export async function GET(
       return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
     }
 
-    const historicalMetrics = await metricsService.getHistoricalMetrics(id, timeframe);
-    const latestMetrics = await metricsService.getLatestMetrics(id);
-    const pnl = await metricsService.calculatePnL(id, 30);
-    const risk = await metricsService.calculateRiskMetrics(id, timeframe);
+    const trades = await tradeService.getBotTrades(id, limit);
 
     return NextResponse.json({
-      historical: historicalMetrics,
-      latest: latestMetrics,
-      pnl,
-      risk,
+      trades,
     });
   } catch (error) {
-    console.error('Error fetching metrics:', error);
+    console.error('Error fetching trades:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },

@@ -1,4 +1,4 @@
-export interface BotMetrics {
+export type BotMetrics = {
   id: string;
   botId: string;
   timestamp: Date;
@@ -9,18 +9,18 @@ export interface BotMetrics {
   filledOrdersCount: number | null;
   volume24h: number | null;
   createdAt: Date;
-}
+};
 
-export interface MetricPoint {
+export type MetricPoint = {
   timestamp: Date;
   balanceUsd: number;
   totalPnl: number;
   totalPnlPct: number;
-}
+};
 
 export type Timeframe = '1h' | '4h' | '1d' | '7d' | '30d' | 'all';
 
-export interface PnLData {
+export type PnLData = {
   total: number;
   totalPct: number;
   realized: number;
@@ -29,9 +29,9 @@ export interface PnLData {
     start: Date;
     end: Date;
   };
-}
+};
 
-export interface PortfolioValue {
+export type PortfolioValue = {
   totalBalance: number;
   totalPnl: number;
   totalPnlPct: number;
@@ -39,9 +39,9 @@ export interface PortfolioValue {
   activeBotsCount: number;
   byExchange: Record<string, number>;
   byStrategy: Record<string, number>;
-}
+};
 
-export interface Order {
+export type Order = {
   id: string;
   botId: string;
   exchangeOrderId: string | null;
@@ -55,13 +55,35 @@ export interface Order {
   exchangeTimestamp: Date | null;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
-export interface BotLog {
+export type BotLog = {
   id: string;
   botId: string;
   level: 'info' | 'warning' | 'error';
   message: string;
   metadata: Record<string, unknown> | null;
   createdAt: Date;
-}
+};
+
+export type RiskMetrics = {
+  sharpeRatio: number;
+  maxDrawdown: number;
+  maxDrawdownPct: number;
+  winRate: number;
+  totalTrades: number;
+};
+
+export type Trade = {
+  id: number;
+  market: string;
+  symbol: string;
+  baseAsset: string;
+  quoteAsset: string;
+  orderType: string;
+  tradeType: string;
+  price: number;
+  amount: number;
+  exchangeTimestamp: Date;
+  createdAt: Date;
+};

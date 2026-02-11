@@ -1,20 +1,22 @@
-import { eq, and, gte, desc } from 'drizzle-orm';
+import { and, desc, eq, gte } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
 import {
-  botMetricsSchema,
-  ordersSchema,
   botLogsSchema,
+  botMetricsSchema,
   botsSchema,
+  ordersSchema,
+  tradesSchema,
 } from '@/models/Schema';
 import { redisService } from '@/services/cache/RedisService';
 
 import type {
   BotMetrics,
   MetricPoint,
-  Timeframe,
   PnLData,
   PortfolioValue,
+  RiskMetrics,
+  Timeframe,
 } from './types';
 
 export class MetricsService {
@@ -41,12 +43,12 @@ export class MetricsService {
       id: saved.id,
       botId: saved.botId,
       timestamp: saved.timestamp,
-      balanceUsd: saved.balanceUsd ? parseFloat(saved.balanceUsd) : null,
-      totalPnl: saved.totalPnl ? parseFloat(saved.totalPnl) : null,
-      totalPnlPct: saved.totalPnlPct ? parseFloat(saved.totalPnlPct) : null,
+      balanceUsd: saved.balanceUsd ? Number.parseFloat(saved.balanceUsd) : null,
+      totalPnl: saved.totalPnl ? Number.parseFloat(saved.totalPnl) : null,
+      totalPnlPct: saved.totalPnlPct ? Number.parseFloat(saved.totalPnlPct) : null,
       activeOrdersCount: saved.activeOrdersCount,
       filledOrdersCount: saved.filledOrdersCount,
-      volume24h: saved.volume24h ? parseFloat(saved.volume24h) : null,
+      volume24h: saved.volume24h ? Number.parseFloat(saved.volume24h) : null,
       createdAt: saved.createdAt,
     };
   }
@@ -92,11 +94,11 @@ export class MetricsService {
       .orderBy(desc(botMetricsSchema.timestamp))
       .limit(1000);
 
-    return metrics.map((m) => ({
+    return metrics.map(m => ({
       timestamp: m.timestamp,
-      balanceUsd: m.balanceUsd ? parseFloat(m.balanceUsd) : 0,
-      totalPnl: m.totalPnl ? parseFloat(m.totalPnl) : 0,
-      totalPnlPct: m.totalPnlPct ? parseFloat(m.totalPnlPct) : 0,
+      balanceUsd: m.balanceUsd ? Number.parseFloat(m.balanceUsd) : 0,
+      totalPnl: m.totalPnl ? Number.parseFloat(m.totalPnl) : 0,
+      totalPnlPct: m.totalPnlPct ? Number.parseFloat(m.totalPnlPct) : 0,
     }));
   }
 
@@ -123,12 +125,12 @@ export class MetricsService {
       id: latest.id,
       botId: latest.botId,
       timestamp: latest.timestamp,
-      balanceUsd: latest.balanceUsd ? parseFloat(latest.balanceUsd) : null,
-      totalPnl: latest.totalPnl ? parseFloat(latest.totalPnl) : null,
-      totalPnlPct: latest.totalPnlPct ? parseFloat(latest.totalPnlPct) : null,
+      balanceUsd: latest.balanceUsd ? Number.parseFloat(latest.balanceUsd) : null,
+      totalPnl: latest.totalPnl ? Number.parseFloat(latest.totalPnl) : null,
+      totalPnlPct: latest.totalPnlPct ? Number.parseFloat(latest.totalPnlPct) : null,
       activeOrdersCount: latest.activeOrdersCount,
       filledOrdersCount: latest.filledOrdersCount,
-      volume24h: latest.volume24h ? parseFloat(latest.volume24h) : null,
+      volume24h: latest.volume24h ? Number.parseFloat(latest.volume24h) : null,
       createdAt: latest.createdAt,
     };
 
@@ -182,8 +184,8 @@ export class MetricsService {
       };
     }
 
-    const initialBalance = firstMetric.balanceUsd ? parseFloat(firstMetric.balanceUsd) : 0;
-    const finalBalance = lastMetric.balanceUsd ? parseFloat(lastMetric.balanceUsd) : 0;
+    const initialBalance = firstMetric.balanceUsd ? Number.parseFloat(firstMetric.balanceUsd) : 0;
+    const finalBalance = lastMetric.balanceUsd ? Number.parseFloat(lastMetric.balanceUsd) : 0;
     const totalPnl = finalBalance - initialBalance;
     const totalPct = initialBalance > 0 ? (totalPnl / initialBalance) * 100 : 0;
 
@@ -234,17 +236,23 @@ export class MetricsService {
       allExchanges.map(async (cred) => {
         try {
           const fullCreds = await credentialsService.getCredentials(orgId, cred.exchange);
-          if (!fullCreds) return;
+          if (!fullCreds) {
+            return;
+          }
 
           const accountInfo = await exchangeAPIService.getAccountInfo(
             cred.exchange as any,
             fullCreds,
           );
-          if (!accountInfo) return;
+          if (!accountInfo) {
+            return;
+          }
 
           let exchangeTotalUsd = 0;
           for (const balance of accountInfo.balances) {
-            if (balance.total <= 0) continue;
+            if (balance.total <= 0) {
+              continue;
+            }
 
             // If it's already a stablecoin, use 1.0 as price
             if (['USDT', 'USDC', 'DAI', 'BUSD'].includes(balance.currency.toUpperCase())) {
@@ -274,10 +282,10 @@ export class MetricsService {
     );
 
     // 2. Add bot specific metrics (PnL calculation)
-    const botIds = bots.map((b) => b.id);
+    const botIds = bots.map(b => b.id);
     if (botIds.length > 0) {
       const latestMetrics = await Promise.all(
-        botIds.map((botId) => this.getLatestMetrics(botId)),
+        botIds.map(botId => this.getLatestMetrics(botId)),
       );
 
       bots.forEach((bot, index) => {
@@ -294,8 +302,8 @@ export class MetricsService {
 
         // We use bot weights for strategy distribution if real balance is available
         // For now, simplify and use 0 if metrics not found
-        byStrategy[bot.strategyType] =
-          (byStrategy[bot.strategyType] || 0) + (metrics?.balanceUsd || 0);
+        byStrategy[bot.strategyType]
+          = (byStrategy[bot.strategyType] || 0) + (metrics?.balanceUsd || 0);
       });
     }
 
@@ -336,16 +344,16 @@ export class MetricsService {
       .limit(limit)
       .offset(offset);
 
-    return orders.map((o) => ({
+    return orders.map(o => ({
       id: o.id,
       botId: o.botId,
       exchangeOrderId: o.exchangeOrderId,
       tradingPair: o.tradingPair,
       orderType: o.orderType as 'buy' | 'sell',
       orderSide: o.orderSide as 'limit' | 'market',
-      price: o.price ? parseFloat(o.price) : null,
-      quantity: o.quantity ? parseFloat(o.quantity) : null,
-      filledQuantity: o.filledQuantity ? parseFloat(o.filledQuantity) : null,
+      price: o.price ? Number.parseFloat(o.price) : null,
+      quantity: o.quantity ? Number.parseFloat(o.quantity) : null,
+      filledQuantity: o.filledQuantity ? Number.parseFloat(o.filledQuantity) : null,
       status: o.status as 'open' | 'filled' | 'cancelled' | 'failed',
       exchangeTimestamp: o.exchangeTimestamp,
       createdAt: o.createdAt,
@@ -401,6 +409,86 @@ export class MetricsService {
       .returning();
 
     return saved;
+  }
+
+  async calculateRiskMetrics(botId: string, timeframe: Timeframe = '30d'): Promise<RiskMetrics> {
+    const metrics = await this.getHistoricalMetrics(botId, timeframe);
+
+    if (metrics.length < 2) {
+      return {
+        sharpeRatio: 0,
+        maxDrawdown: 0,
+        maxDrawdownPct: 0,
+        winRate: 0,
+        totalTrades: 0,
+      };
+    }
+
+    // 1. Calculate Sharpe Ratio
+    // We assume 1 point per hour if data is dense, or whatever we have
+    const returns: number[] = [];
+    for (let i = 1; i < metrics.length; i++) {
+      const prev = metrics[i - 1]?.balanceUsd || 0;
+      const curr = metrics[i]?.balanceUsd || 0;
+      if (prev > 0) {
+        returns.push((curr - prev) / prev);
+      }
+    }
+
+    let sharpeRatio = 0;
+    if (returns.length > 0) {
+      const avgReturn = returns.reduce((a, b) => a + b, 0) / returns.length;
+      const stdDev = Math.sqrt(
+        returns.map(x => (x - avgReturn) ** 2).reduce((a, b) => a + b, 0)
+        / returns.length,
+      );
+
+      if (stdDev > 0) {
+        // Annualize hourly returns (24 * 365 = 8760 hours in year)
+        // Adjust based on typical sampling freq. Here assuming hourly.
+        sharpeRatio = (avgReturn / stdDev) * Math.sqrt(8760);
+      }
+    }
+
+    // 2. Calculate Max Drawdown
+    let peak = -Infinity;
+    let maxDrawdown = 0;
+    let maxDrawdownPct = 0;
+
+    metrics.forEach((m) => {
+      if (m.balanceUsd > peak) {
+        peak = m.balanceUsd;
+      }
+      const dd = peak - m.balanceUsd;
+      const ddPct = peak > 0 ? (dd / peak) * 100 : 0;
+
+      if (dd > maxDrawdown) {
+        maxDrawdown = dd;
+      }
+      if (ddPct > maxDrawdownPct) {
+        maxDrawdownPct = ddPct;
+      }
+    });
+
+    // 3. Stats from trades
+    const trades = await db
+      .select()
+      .from(tradesSchema)
+      .where(eq(tradesSchema.botId, botId));
+
+    const totalTrades = trades.length;
+    // Simple win rate based on trade_type if available or PnL of trade
+    // Hummingbot doesn't explicitly flag "winning" trade, we'd need to match buy/sell
+    // For now, let's look at consecutive trades or placeholder
+    const winRate = totalTrades > 0 ? 50 : 0; // Placeholder until we have match-engine logic
+
+    return {
+      sharpeRatio,
+      maxDrawdown,
+      maxDrawdownPct,
+      winRate,
+      totalTrades,
+    };
   }
 }
 

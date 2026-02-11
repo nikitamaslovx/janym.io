@@ -223,7 +223,9 @@
     "create_button": "Создать Бота",
     "update_button": "Обновить Бота",
     "cancel_button": "Отмена",
-    "saving": "Сохранение..."
+    "saving": "Сохранение...",
+    "v2_config_label": "Конфигурация V2 Контроллеров (JSON)",
+    "v2_config_description": "Определите параметры контроллеров в формате JSON. Эта конфигурация будет применена к боту."
   },
   "BotDashboard": {
     "meta_title": "Панель Бота",
