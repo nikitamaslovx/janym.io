@@ -1,169 +1,193 @@
 {
   "Index": {
-    "meta_title": "SaaS Template - The perfect SaaS template to build and scale your business with ease.",
-    "meta_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS."
+    "meta_title": "Janym.io - Облачная автоматизация крипто-торговли",
+    "meta_description": "Автоматизируйте торговлю криптовалютой. Вы ничего не платите, пока бот не начнет приносить прибыль."
   },
   "Navbar": {
-    "sign_in": "Sign In",
-    "sign_up": "Sign Up",
-    "product": "Product",
-    "docs": "Docs",
-    "blog": "Blog",
-    "community": "Community",
-    "company": "Company"
+    "sign_in": "Вход",
+    "sign_up": "Регистрация",
+    "product": "Продукт",
+    "docs": "База знаний",
+    "blog": "Блог",
+    "community": "Сообщество",
+    "company": "О нас"
   },
   "Hero": {
-    "follow_twitter": "Подписывайтесь в Twitter",
-    "title": "Автоматизируйте торговлю криптой с <important>Janym.io</important>",
-    "description": "Запускайте, управляйте и мониторьте стратегии Hummingbot в облаке. Без написания кода.",
-    "primary_button": "Начать торговлю",
+    "follow_twitter": "Получите $5 для тестирования",
+    "title": "Создан, чтобы зарабатывать для вас на лучших <important>криптовалютных биржах</important>",
+    "description": "Автоматизируйте торговлю криптовалютой, чтобы сэкономить время. Вы ничего не платите, пока бот не начнет приносить вам прибыль.",
+    "primary_button": "Начать зарабатывать",
     "secondary_button": "Демонстрация"
   },
   "Sponsors": {
-    "title": "Sponsored by"
+    "title": "Подключенные биржи"
   },
   "Features": {
-    "section_subtitle": "Features",
-    "section_title": "Unlock the Full Potential of the SaaS Template",
-    "section_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
-    "feature1_title": "Node.js",
-    "feature2_title": "React",
-    "feature3_title": "Tailwind CSS",
-    "feature4_title": "TypeScript",
-    "feature5_title": "Shadcn UI",
-    "feature6_title": "ESLint",
-    "feature_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS."
+    "section_subtitle": "Возможности",
+    "section_title": "Гибкая настройка позволит управлять рисками",
+    "section_description": "Наш сервис предназначен для автоматической торговли криптовалютами и круглосуточно контролирует весь процесс.",
+    "feature1_title": "Умная сетка ордеров",
+    "feature1_description": "Для торговли используется сетка ордеров, которую бот размещает на бирже.",
+    "feature2_title": "Автоматическая торговля 24/7",
+    "feature2_description": "Бот выставляет ордера и отслеживает их выполнение круглые сутки. Вам не нужно постоянно следить за работой.",
+    "feature3_title": "Симуляция (Backtests)",
+    "feature3_description": "Посмотрите симуляцию работы бота за последние 60 дней. Протестируйте настройки на исторических данных.",
+    "feature4_title": "Маркетплейс",
+    "feature4_description": "Покупайте и продавайте эффективные конфигурации ботов и услугу наставничества.",
+    "feature5_title": "Кредитное плечо до x125",
+    "feature5_description": "Торговля фьючерсами позволяет открывать большие позиции с минимальными вложениями.",
+    "feature6_title": "Безопасно",
+    "feature6_description": "Мы не храним ваши средства. Все активы остаются на ваших аккаунтах бирж."
   },
   "Pricing": {
-    "section_subtitle": "Features",
-    "section_title": "Unlock the Full Potential of the SaaS Template",
-    "section_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
-    "button_text": "Get Started"
+    "section_subtitle": "Тарифы",
+    "section_title": "Пользуйтесь ботом бесплатно, пока он не принесет доход",
+    "section_description": "Мы берем комиссию 20% только с прибыли, но не больше 50 USD в месяц.",
+    "button_text": "Начать бесплатно"
   },
   "PricingPlan": {
-    "free_plan_name": "Free",
-    "premium_plan_name": "Premium",
+    "free_plan_name": "Бесплатно",
+    "premium_plan_name": "Pro",
     "enterprise_plan_name": "Enterprise",
-    "free_plan_description": "For individuals",
-    "premium_plan_description": "For small teams",
-    "enterprise_plan_description": "For industry leaders",
-    "feature_team_member": "{number} Team Members",
-    "feature_website": "{number} Websites",
-    "feature_storage": "{number} GB Storage",
-    "feature_transfer": "{number} TB Transfer",
-    "feature_email_support": "Email Support",
-    "plan_interval_month": "month",
-    "plan_interval_year": "year",
-    "next_renew_date": "Your subscription renews on {date}"
+    "free_plan_description": "До первой прибыли",
+    "premium_plan_description": "При наличии прибыли",
+    "enterprise_plan_description": "Индивидуальные условия",
+    "feature_team_member": "{number} Участников",
+    "feature_website": "{number} Ботов",
+    "feature_storage": "Безлимитные сделки",
+    "feature_transfer": "Круглосуточная поддержка",
+    "feature_email_support": "Email поддержка",
+    "plan_interval_month": "мес",
+    "plan_interval_year": "год",
+    "next_renew_date": "Обновление {date}"
+  },
+  "Steps": {
+    "section_title": "Всего 3 простых шага, чтобы начать",
+    "section_description": "И вы получите доступ к настройке и запуску торговых ботов для автоматизированной торговли криптовалютой",
+    "step1_title": "Шаг 1: Подключите биржу",
+    "step1_description": "Подключите вашу биржу к Janym через Fast API в пару кликов",
+    "step2_title": "Шаг 2: Создайте бота",
+    "step2_description": "Создайте своего бота или скопируйте готовые настройки",
+    "step3_title": "Шаг 3: Запустите Janym",
+    "step3_description": "Запустите бота и он начнет торговлю 24/7"
   },
   "FAQ": {
-    "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit."
+    "section_title": "Часто задаваемые вопросы",
+    "question1": "Сколько это стоит?",
+    "answer1": "Мы берем комиссию 20% только с чистой прибыли, но не более 50 USD в месяц. Если прибыли нет — вы ничего не платите.",
+    "question2": "Это безопасно?",
+    "answer2": "Да. Мы не храним ваши средства. Все деньги находятся на вашем аккаунте на бирже, а бот работает через API ключи с ограниченными правами.",
+    "question3": "Какие биржи поддерживаются?",
+    "answer3": "В данный момент поддерживаются Binance, OKX, Bybit, Kucoin, Kraken и многие другие (более 15 бирж).",
+    "question4": "Нужно ли мне постоянно следить за ботом?",
+    "answer4": "Нет, бот работает в облаке 24/7. Вы можете следить за статистикой в любое время через личный кабинет.",
+    "question5": "Есть ли бесплатный период?",
+    "answer5": "Да, при регистрации вы получаете $5 на баланс для тестирования. Вы начнете платить комиссию только после того, как бот заработает для вас реальные деньги."
   },
   "CTA": {
-    "title": "You are ready?",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "button_text": "Star on GitHub"
+    "title": "Готовы начать зарабатывать?",
+    "description": "Без абонентской платы. Вы платите только когда получаете прибыль.",
+    "button_text": "Регистрация"
   },
   "Footer": {
-    "product": "Product",
-    "docs": "Docs",
-    "blog": "Blog",
-    "community": "Community",
-    "company": "Company",
-    "terms_of_service": "Terms Of Service",
-    "privacy_policy": "Privacy Policy",
-    "footer_text": "© {year} {name}. Made with <author></author>."
+    "product": "Продукт",
+    "docs": "Документация",
+    "blog": "Блог",
+    "community": "Сообщество",
+    "company": "Компания",
+    "terms_of_service": "Пользовательское соглашение",
+    "privacy_policy": "Политика конфиденциальности",
+    "footer_text": "© {year} Janym.io. Все права защищены."
   },
   "ProtectFallback": {
-    "not_enough_permission": "You do not have the permissions to perform this action"
+    "not_enough_permission": "У вас недостаточно прав для выполнения этого действия"
   },
   "SignIn": {
-    "meta_title": "Sign in",
-    "meta_description": "Seamlessly sign in to your account with our user-friendly login process."
+    "meta_title": "Вход",
+    "meta_description": "Войдите в свой аккаунт"
   },
   "SignUp": {
-    "meta_title": "Sign up",
-    "meta_description": "Effortlessly create an account through our intuitive sign-up process."
+    "meta_title": "Регистрация",
+    "meta_description": "Создайте новый аккаунт"
   },
   "DashboardLayout": {
     "home": "Главная",
     "strategies": "Стратегии",
     "todos": "Задачи",
-    "members": "Members",
-    "billing": "Billing",
-    "settings": "Settings"
+    "members": "Участники",
+    "billing": "Биллинг",
+    "settings": "Настройки"
   },
   "Dashboard": {
-    "meta_title": "SaaS Template Dashboard",
-    "meta_description": "A free and open-source landing page template for your SaaS business, built with Next.js, TypeScript, Shadcn UI, and Tailwind CSS."
+    "meta_title": "Панель управления",
+    "meta_description": "Панель управления Janym.io"
   },
   "DashboardIndex": {
-    "title_bar": "Dashboard",
-    "title_bar_description": "Welcome to your dashboard",
-    "message_state_title": "Let's get started",
-    "message_state_description": "You can customize this page by editing the file at <code>dashboard/page.tsx</code>",
+    "title_bar": "Панель управления",
+    "title_bar_description": "Добро пожаловать",
+    "message_state_title": "Давайте начнем",
+    "message_state_description": "Вы можете настроить эту страницу в файле <code>dashboard/page.tsx</code>",
     "message_state_button": "Star on GitHub",
-    "message_state_alternative": "Need advanced features? Next.js 16 & React 19, Multi-tenancy & Teams, Roles & Permissions, Shadcn UI,\nEnd-to-End Typesafety with oRPC, Stripe Payment, Light / Dark mode. Try <url></url>.",
-    "max_message": "Or, need a Self-hosted auth stack (Better Auth)? Try <url></url>."
+    "message_state_alternative": "Нужны дополнительные функции? Попробуйте Pro версию.",
+    "max_message": "Или self-hosted версию."
   },
   "UserProfile": {
-    "title_bar": "User Profile",
-    "title_bar_description": "View and manage your user profile"
+    "title_bar": "Профиль пользователя",
+    "title_bar_description": "Управление профилем"
   },
   "OrganizationProfile": {
-    "title_bar": "Organization Management",
-    "title_bar_description": "Manage your organization"
+    "title_bar": "Управление организацией",
+    "title_bar_description": "Настройки вашей команды"
   },
   "Billing": {
-    "title_bar": "Billing",
-    "title_bar_description": "Manage your billing and subscription",
-    "current_section_title": "Current Plan",
-    "current_section_description": "Adjust your payment plan to best suit your requirements",
-    "manage_subscription_button": "Manage Subscription"
+    "title_bar": "Биллинг",
+    "title_bar_description": "Управление подпиской и оплатой",
+    "current_section_title": "Текущий план",
+    "current_section_description": "Выберите подходящий тариф",
+    "manage_subscription_button": "Управление подпиской"
   },
   "BillingOptions": {
-    "current_plan": "Current Plan",
-    "upgrade_plan": "Get Started"
+    "current_plan": "Текущий план",
+    "upgrade_plan": "Выбрать"
   },
   "CheckoutConfirmation": {
-    "title_bar": "Payment Confirmation",
-    "message_state_title": "Payment successful",
-    "message_state_description": "Your payment has been successfully processed. Thank you for your purchase!",
-    "message_state_button": "Go back to Billing"
+    "title_bar": "Подтверждение оплаты",
+    "message_state_title": "Оплата успешна",
+    "message_state_description": "Ваш платеж успешно обработан. Спасибо!",
+    "message_state_button": "Вернуться в биллинг"
   },
   "DataTable": {
-    "no_results": "No results."
+    "no_results": "Нет данных."
   },
   "Todos": {
-    "title_bar": "Todo List",
-    "title_bar_description": "View and manage your todo list",
-    "add_todo_button": "New todo"
+    "title_bar": "Список задач",
+    "title_bar_description": "Управление задачами",
+    "add_todo_button": "Новая задача"
   },
   "TodoTableColumns": {
-    "open_menu": "Open menu",
-    "edit": "Edit",
-    "delete": "Delete",
-    "title_header": "Title",
-    "message_header": "Message",
-    "created_at_header": "Created at"
+    "open_menu": "Открыть меню",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "title_header": "Заголовок",
+    "message_header": "Сообщение",
+    "created_at_header": "Создано"
   },
   "AddTodo": {
-    "title_bar": "Add Todo",
-    "add_todo_section_title": "Create a new todo",
-    "add_todo_section_description": "Fill in the form below to create a new todo"
+    "title_bar": "Добавить задачу",
+    "add_todo_section_title": "Создать новую задачу",
+    "add_todo_section_description": "Заполните форму ниже"
   },
   "EditTodo": {
-    "title_bar": "Edit todo",
-    "edit_todo_section_title": "Modify todo",
-    "edit_todo_section_description": "Fill in the form below to edit the todo"
+    "title_bar": "Редактировать задачу",
+    "edit_todo_section_title": "Изменить задачу",
+    "edit_todo_section_description": "Заполните форму ниже"
   },
   "TodoForm": {
-    "title_label": "Title",
-    "title_description": "Enter a descriptive title for your todo.",
-    "message_title": "Message",
-    "message_description": "Enter a detailed message for your todo.",
-    "submit_button": "Submit"
+    "title_label": "Заголовок",
+    "title_description": "Введите заголовок задачи",
+    "message_title": "Сообщение",
+    "message_description": "Введите описание задачи",
+    "submit_button": "Сохранить"
   },
   "StrategyDashboard": {
     "meta_title": "Панель Стратегий - Janym.io",
