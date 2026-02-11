@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/nikitamaslovx/janym.io/compare/v1.2.0...v1.3.0) (2026-02-11)
+
+
+### Features
+
+* enhance dashboard with charts and logs, add backtest ([4f61e09](https://github.com/nikitamaslovx/janym.io/commit/4f61e09f8f48f722b15c8f05ca72c778ac6cbc09))
+
 # [1.2.0](https://github.com/nikitamaslovx/janym.io/compare/v1.1.0...v1.2.0) (2026-02-11)
 
 
