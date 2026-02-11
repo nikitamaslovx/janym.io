@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/nikitamaslovx/janym.io/compare/v1.1.0...v1.2.0) (2026-02-11)
+
+
+### Features
+
+* integrate hummingbot gateway, update dashboard and localization ([5ba6947](https://github.com/nikitamaslovx/janym.io/commit/5ba69471259fb526d983ee0794e8e088516b66ff))
+
 # [1.1.0](https://github.com/nikitamaslovx/janym.io/compare/v1.0.0...v1.1.0) (2026-02-11)
 
 
