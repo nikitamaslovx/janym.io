@@ -13,11 +13,11 @@
     "company": "Company"
   },
   "Hero": {
-    "follow_twitter": "Follow us on Twitter",
-    "title": "Automate your crypto trading with <important>Janym.io</important>",
-    "description": "Deploy, manage, and monitor your Hummingbot strategies in the cloud. No coding required.",
-    "primary_button": "Start Trading",
-    "secondary_button": "View Demo"
+    "follow_twitter": "Подписывайтесь в Twitter",
+    "title": "Автоматизируйте торговлю криптой с <important>Janym.io</important>",
+    "description": "Запускайте, управляйте и мониторьте стратегии Hummingbot в облаке. Без написания кода.",
+    "primary_button": "Начать торговлю",
+    "secondary_button": "Демонстрация"
   },
   "Sponsors": {
     "title": "Sponsored by"
@@ -87,9 +87,9 @@
     "meta_description": "Effortlessly create an account through our intuitive sign-up process."
   },
   "DashboardLayout": {
-    "home": "Home",
-    "strategies": "Strategies",
-    "todos": "Todos",
+    "home": "Главная",
+    "strategies": "Стратегии",
+    "todos": "Задачи",
     "members": "Members",
     "billing": "Billing",
     "settings": "Settings"
@@ -166,18 +166,18 @@
     "submit_button": "Submit"
   },
   "StrategyDashboard": {
-    "meta_title": "Strategy Dashboard - Janym.io",
-    "meta_description": "Manage your trading bots and strategies.",
-    "header_title": "My Strategies",
-    "header_description": "Monitor and control your automated trading bots."
+    "meta_title": "Панель Стратегий - Janym.io",
+    "meta_description": "Управление торговыми ботами и стратегиями.",
+    "header_title": "Мои Стратегии",
+    "header_description": "Мониторинг и управление вашими ботами."
   },
   "StrategyList": {
-    "title": "Active Bots",
-    "description": "Real-time status from Hummingbot instances.",
-    "add_bot": "Add New Bot"
+    "title": "Активные Боты",
+    "description": "Статус ботов в реальном времени.",
+    "add_bot": "Добавить Бота"
   },
   "BalanceChart": {
-    "title": "Total Balance",
-    "description": "Your portfolio value over time (USD)"
+    "title": "Общий Баланс",
+    "description": "Стоимость вашего портфеля (USD)"
   }
 }

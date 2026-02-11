@@ -13,10 +13,12 @@ export const Logo = (props: {
       strokeLinejoin="round"
     >
       <path d="M0 0h24v24H0z" stroke="none" />
-      <rect x="3" y="12" width="6" height="8" rx="1" />
-      <rect x="9" y="8" width="6" height="12" rx="1" />
-      <rect x="15" y="4" width="6" height="16" rx="1" />
-      <path d="M4 20h14" />
+      <path d="M12 3l-4 4l-4 -4" />
+      <path d="M4 7l4 4l4 -4" />
+      <path d="M16 7l4 -4l-4 -4" />
+      <path d="M16 11l4 4l-4 4" />
+      <path d="M8 11l-4 4l4 4" />
+      <path d="M12 21l4 -4l-4 -4" />
     </svg>
     {!props.isTextHidden && AppConfig.name}
   </div>

@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 
+import { BalanceChart } from '@/features/dashboard/analytics/BalanceChart';
 import { MessageState } from '@/features/dashboard/MessageState';
 import { TitleBar } from '@/features/dashboard/TitleBar';
 import { SponsorLogos } from '@/features/sponsors/SponsorLogos';
@@ -69,6 +70,15 @@ const DashboardIndexPage = () => {
           </>
         )}
       />
+
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">{t('header_title')}</h1>
+        <p className="text-lg text-muted-foreground">{t('header_description')}</p>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-4 lg:grid-cols-8">
+        <BalanceChart />
+      </div>
     </>
   );
 };

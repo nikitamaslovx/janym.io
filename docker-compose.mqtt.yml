@@ -1,0 +1,22 @@
+services:
+  emqx:
+    image: emqx/emqx:5.8.5
+    container_name: emqx
+    environment:
+      - EMQX_NODE_NAME=emqx@node1.emqx.io
+      - EMQX_CLUSTER__DISCOVERY_STRATEGY=static
+      - EMQX_DASHBOARD__DEFAULT_USERNAME=admin
+      - EMQX_DASHBOARD__DEFAULT_PASSWORD=public
+    ports:
+      - '1883:1883' # MQTT TCP
+      - '8083:8083' # MQTT Websocket
+      - '8883:8883' # MQTT SSL
+      - '8084:8084' # MQTT WSS
+      - '18083:18083' # Dashboard
+    volumes:
+      - emqx_data:/opt/emqx/data
+      - emqx_log:/opt/emqx/log
+
+volumes:
+  emqx_data:
+  emqx_log:
