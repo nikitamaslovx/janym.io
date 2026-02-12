@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/nikitamaslovx/janym.io/compare/v1.4.0...v1.5.0) (2026-02-12)
+
+
+### Features
+
+* enhance dashboard, add analytics and localized routes ([7745913](https://github.com/nikitamaslovx/janym.io/commit/774591388ce737691cccfb74d7009f8dc2ec64f7))
+
 # [1.4.0](https://github.com/nikitamaslovx/janym.io/compare/v1.3.0...v1.4.0) (2026-02-12)
 
 
