@@ -50,7 +50,9 @@ export const BotDashboard = () => {
 
   const loadBotData = React.useCallback(async () => {
     try {
-      setIsLoading(true);
+      if (!bot) {
+        setIsLoading(true);
+      }
       setError(null);
 
       // Load bot info
@@ -93,7 +95,7 @@ export const BotDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [botId, timeframe]);
+  }, [botId, timeframe, bot]);
 
   useEffect(() => {
     if (!botId) {

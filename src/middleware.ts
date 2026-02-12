@@ -27,53 +27,41 @@ export default function middleware(
   request: NextRequest,
   event: NextFetchEvent,
 ) {
-  if (
-    request.nextUrl.pathname.includes('/sign-in')
-    || request.nextUrl.pathname.includes('/sign-up')
-    || isProtectedRoute(request)
-  ) {
-    return clerkMiddleware(async (auth, req) => {
-      if (isProtectedRoute(req)) {
-        const locale
-          = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
+  return clerkMiddleware(async (auth, req) => {
+    if (isProtectedRoute(req)) {
+      const locale
+        = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
 
-        const signInUrl = new URL(`${locale}/sign-in`, req.url);
+      const signInUrl = new URL(`${locale}/sign-in`, req.url);
 
-        await auth.protect({
-          // `unauthenticatedUrl` is needed to avoid error: "Unable to find `next-intl` locale because the middleware didn't run on this request"
-          unauthenticatedUrl: signInUrl.toString(),
-        });
-      }
+      await auth.protect({
+        // `unauthenticatedUrl` is needed to avoid error: "Unable to find `next-intl` locale because the middleware didn't run on this request"
+        unauthenticatedUrl: signInUrl.toString(),
+      });
+    }
 
-      const authObj = await auth();
+    const authObj = await auth();
 
-      if (
-        authObj.userId
-        && !authObj.orgId
-        && req.nextUrl.pathname.includes('/dashboard')
-        && !req.nextUrl.pathname.endsWith('/organization-selection')
-      ) {
-        const orgSelection = new URL(
-          '/onboarding/organization-selection',
-          req.url,
-        );
+    if (
+      authObj.userId
+      && !authObj.orgId
+      && req.nextUrl.pathname.includes('/dashboard')
+      && !req.nextUrl.pathname.endsWith('/organization-selection')
+    ) {
+      const orgSelection = new URL(
+        '/onboarding/organization-selection',
+        req.url,
+      );
 
-        return NextResponse.redirect(orgSelection);
-      }
+      return NextResponse.redirect(orgSelection);
+    }
 
-      if (req.nextUrl.pathname.startsWith('/api')) {
-        return NextResponse.next();
-      }
+    if (req.nextUrl.pathname.startsWith('/api')) {
+      return NextResponse.next();
+    }
 
-      return intlMiddleware(req);
-    })(request, event);
-  }
-
-  if (request.nextUrl.pathname.startsWith('/api')) {
-    return NextResponse.next();
-  }
-
-  return intlMiddleware(request);
+    return intlMiddleware(req);
+  })(request, event);
 }
 
 export const config = {

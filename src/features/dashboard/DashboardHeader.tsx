@@ -28,7 +28,7 @@ export const DashboardHeader = (props: {
   return (
     <>
       <div className="flex items-center">
-        <Link href="/dashboard" className="max-sm:hidden">
+        <Link href={getI18nPath('/', locale)} className="max-sm:hidden">
           <Logo />
         </Link>
 

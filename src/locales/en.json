@@ -10,7 +10,8 @@
     "docs": "Docs",
     "blog": "Blog",
     "community": "Community",
-    "company": "Company"
+    "company": "Company",
+    "dashboard": "Dashboard"
   },
   "Hero": {
     "follow_twitter": "Follow us on Twitter",

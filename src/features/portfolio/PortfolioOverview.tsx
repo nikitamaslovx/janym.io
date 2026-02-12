@@ -1,20 +1,13 @@
 'use client';
 
-import React from 'react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  PieChart,
-  Pie,
   Cell,
+  Pie,
+  PieChart,
   ResponsiveContainer,
-  Legend,
   Tooltip,
-  Area,
-  AreaChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
 } from 'recharts';
 
 import {
@@ -34,16 +27,11 @@ export const PortfolioOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadPortfolio();
-    const interval = setInterval(loadPortfolio, 60000); // Refresh every minute
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const loadPortfolio = async () => {
+  const loadPortfolio = useCallback(async () => {
     try {
-      setIsLoading(true);
+      if (!portfolio) {
+        setIsLoading(true);
+      }
       setError(null);
 
       const response = await fetch('/api/portfolio');
@@ -59,7 +47,14 @@ export const PortfolioOverview = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [portfolio]);
+
+  useEffect(() => {
+    loadPortfolio();
+    const interval = setInterval(loadPortfolio, 60000); // Refresh every minute
+
+    return () => clearInterval(interval);
+  }, [loadPortfolio]);
 
   if (isLoading) {
     return <div>Loading portfolio...</div>;
@@ -67,7 +62,7 @@ export const PortfolioOverview = () => {
 
   if (error || !portfolio) {
     return (
-      <div className="text-center py-8">
+      <div className="py-8 text-center">
         <p className="text-destructive">{error || 'No portfolio data'}</p>
       </div>
     );
@@ -97,7 +92,10 @@ export const PortfolioOverview = () => {
             <CardTitle className="text-sm font-medium">{t('total_balance')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${portfolio.totalBalance.toFixed(2)}</div>
+            <div className="text-2xl font-bold">
+              $
+              {portfolio.totalBalance.toFixed(2)}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -110,10 +108,12 @@ export const PortfolioOverview = () => {
                 portfolio.totalPnl >= 0 ? 'text-green-600' : 'text-red-600'
               }`}
             >
-              ${portfolio.totalPnl.toFixed(2)}
+              $
+              {portfolio.totalPnl.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
-              {portfolio.totalPnlPct.toFixed(2)}%
+              {portfolio.totalPnlPct.toFixed(2)}
+              %
             </p>
           </CardContent>
         </Card>
@@ -124,7 +124,9 @@ export const PortfolioOverview = () => {
           <CardContent>
             <div className="text-2xl font-bold">{portfolio.botsCount}</div>
             <p className="text-xs text-muted-foreground">
-              {portfolio.activeBotsCount} {t('active')}
+              {portfolio.activeBotsCount}
+              {' '}
+              {t('active')}
             </p>
           </CardContent>
         </Card>
@@ -155,18 +157,17 @@ export const PortfolioOverview = () => {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) =>
-                      `${name}: ${(percent * 100).toFixed(0)}%`
-                    }
+                    label={({ name, percent }: any) =>
+                      `${name}: ${(percent * 100).toFixed(0)}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
                   >
                     {exchangeData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+                  <Tooltip formatter={(value: number) => `$${(value || 0).toFixed(2)}`} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -187,18 +188,17 @@ export const PortfolioOverview = () => {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) =>
-                      `${name}: ${(percent * 100).toFixed(0)}%`
-                    }
+                    label={({ name, percent }: any) =>
+                      `${name}: ${(percent * 100).toFixed(0)}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
                   >
                     {strategyData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+                  <Tooltip formatter={(value: number) => `$${(value || 0).toFixed(2)}`} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
