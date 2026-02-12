@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/nikitamaslovx/janym.io/compare/v1.5.0...v1.6.0) (2026-02-12)
+
+
+### Features
+
+* enhance dashboard with themes, new pages and api improvements ([bad0e9b](https://github.com/nikitamaslovx/janym.io/commit/bad0e9b567faa63e91106256a601e73453497be1))
+
 # [1.5.0](https://github.com/nikitamaslovx/janym.io/compare/v1.4.0...v1.5.0) (2026-02-12)
 
 
