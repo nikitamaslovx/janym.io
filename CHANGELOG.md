@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/nikitamaslovx/janym.io/compare/v1.3.0...v1.4.0) (2026-02-12)
+
+
+### Features
+
+* update middleware, layouts, and dashboard components ([7920eac](https://github.com/nikitamaslovx/janym.io/commit/7920eacdd454eea33ac052e0e52c0f381ede4487))
+
 # [1.3.0](https://github.com/nikitamaslovx/janym.io/compare/v1.2.0...v1.3.0) (2026-02-11)
 
 
