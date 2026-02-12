@@ -140,20 +140,37 @@ export class MetricsService {
     return result;
   }
 
-  async calculatePnL(botId: string, periodDays: number = 30): Promise<PnLData> {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - periodDays);
+  async calculatePnL(
+    botId: string,
+    periodDays: number = 30,
+    preFetchedMetrics?: MetricPoint[],
+  ): Promise<PnLData> {
+    let metrics: MetricPoint[] = [];
 
-    const metrics = await db
-      .select()
-      .from(botMetricsSchema)
-      .where(
-        and(
-          eq(botMetricsSchema.botId, botId),
-          gte(botMetricsSchema.timestamp, startDate),
-        ),
-      )
-      .orderBy(botMetricsSchema.timestamp);
+    if (preFetchedMetrics) {
+      metrics = preFetchedMetrics;
+    } else {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - periodDays);
+
+      const dbMetrics = await db
+        .select()
+        .from(botMetricsSchema)
+        .where(
+          and(
+            eq(botMetricsSchema.botId, botId),
+            gte(botMetricsSchema.timestamp, startDate),
+          ),
+        )
+        .orderBy(botMetricsSchema.timestamp);
+
+      metrics = dbMetrics.map(m => ({
+        timestamp: m.timestamp,
+        balanceUsd: m.balanceUsd ? Number.parseFloat(m.balanceUsd) : 0,
+        totalPnl: m.totalPnl ? Number.parseFloat(m.totalPnl) : 0,
+        totalPnlPct: m.totalPnlPct ? Number.parseFloat(m.totalPnlPct) : 0,
+      }));
+    }
 
     if (metrics.length === 0) {
       return {
@@ -162,11 +179,14 @@ export class MetricsService {
         realized: 0,
         unrealized: 0,
         period: {
-          start: startDate,
+          start: new Date(Date.now() - periodDays * 24 * 60 * 60 * 1000),
           end: new Date(),
         },
       };
     }
+
+    // Sort by timestamp just in case
+    metrics.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 
     const firstMetric = metrics[0];
     const lastMetric = metrics[metrics.length - 1];
@@ -178,14 +198,14 @@ export class MetricsService {
         realized: 0,
         unrealized: 0,
         period: {
-          start: startDate,
+          start: new Date(),
           end: new Date(),
         },
       };
     }
 
-    const initialBalance = firstMetric.balanceUsd ? Number.parseFloat(firstMetric.balanceUsd) : 0;
-    const finalBalance = lastMetric.balanceUsd ? Number.parseFloat(lastMetric.balanceUsd) : 0;
+    const initialBalance = firstMetric.balanceUsd || 0;
+    const finalBalance = lastMetric.balanceUsd || 0;
     const totalPnl = finalBalance - initialBalance;
     const totalPct = initialBalance > 0 ? (totalPnl / initialBalance) * 100 : 0;
 
@@ -211,7 +231,7 @@ export class MetricsService {
     const cacheKey = `portfolio:${orgId}`;
     const cached = await redisService.get<PortfolioValue>(cacheKey);
     if (cached) {
-      // return cached; // Skip cache for now to verify implementation
+      return cached;
     }
 
     // Get all bots for organization
@@ -411,8 +431,21 @@ export class MetricsService {
     return saved;
   }
 
-  async calculateRiskMetrics(botId: string, timeframe: Timeframe = '30d'): Promise<RiskMetrics> {
-    const metrics = await this.getHistoricalMetrics(botId, timeframe);
+  async calculateRiskMetrics(
+    botId: string,
+    timeframe: Timeframe = '30d',
+    preFetchedMetrics?: MetricPoint[],
+  ): Promise<RiskMetrics> {
+    let metrics: MetricPoint[] = [];
+
+    if (preFetchedMetrics) {
+      metrics = preFetchedMetrics;
+    } else {
+      metrics = await this.getHistoricalMetrics(botId, timeframe);
+    }
+
+    // Sort by timestamp ascending for calculations
+    metrics.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 
     if (metrics.length < 2) {
       return {

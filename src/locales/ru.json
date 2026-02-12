@@ -113,12 +113,13 @@
   },
   "DashboardLayout": {
     "home": "Главная",
-    "strategies": "Стратегии",
-    "portfolio": "Портфель",
-    "exchanges": "Биржи",
-    "todos": "Задачи",
-    "members": "Участники",
-    "billing": "Биллинг",
+    "bots": "Боты",
+    "marketplace": "Маркетплейс",
+    "statistics": "Статистика",
+    "finance": "Финансы",
+    "referral": "Реферальная программа",
+    "knowledge_base": "База знаний",
+    "profile": "Профиль",
     "settings": "Настройки"
   },
   "Dashboard": {
@@ -228,7 +229,60 @@
     "v2_config_label": "Конфигурация V2 Контроллеров (JSON)",
     "v2_config_description": "Определите параметры контроллеров в формате JSON. Эта конфигурация будет применена к боту."
   },
+  "BotWizard": {
+    "steps": {
+      "init": "Общие настройки",
+      "pair": "Пара и алгоритм",
+      "budget": "Бюджет",
+      "strategy": "Стратегия",
+      "filters": "Фильтры"
+    },
+    "init": {
+      "nameLabel": "Название бота",
+      "exchangeLabel": "Биржа",
+      "apiKeyLabel": "API Ключ"
+    },
+    "pair": {
+      "pairLabel": "Торговая пара",
+      "algoLabel": "Алгоритм",
+      "algoLong": "Long",
+      "algoShort": "Short"
+    },
+    "budget": {
+      "limitLabel": "Лимит средств",
+      "amountPlaceholder": "Введите сумму",
+      "percentPlaceholder": "% от депозита"
+    },
+    "strategy": {
+      "modeLabel": "Режим настройки",
+      "template": "Шаблон",
+      "manual": "PRO (Вручную)",
+      "templates": {
+        "light": "Light (Консервативный)",
+        "normal": "Normal (Умеренный)",
+        "extreme": "Extreme (Агрессивный)"
+      }
+    },
+    "filters": {
+      "startFilters": "Фильтры старта",
+      "rsi": "RSI",
+      "bollinger": "Bollinger Bands"
+    },
+    "buttons": {
+      "next": "Далее",
+      "back": "Назад",
+      "create": "Создать",
+      "cancel": "Отмена"
+    }
+  },
   "BotDashboard": {
+    "controls": {
+      "start": "Запустить",
+      "stop": "Остановить",
+      "forceStop": "Экстренная остановка",
+      "cancelCycle": "Отменить цикл",
+      "restart": "Перезапустить"
+    },
     "meta_title": "Панель Бота",
     "meta_description": "Просмотр деталей и метрик бота",
     "title": "Панель Бота",
@@ -308,5 +362,26 @@
     "minDeposit": "Депозит",
     "risk": "Уровень Риска",
     "copyBot": "Скопировать"
+  },
+  "Marketplace": {
+    "title": "Маркетплейс",
+    "description": "Магазин готовых конфигураций и услуг наставников",
+    "tabs": {
+      "buy": "Купить конфигурацию",
+      "sell": "Продать конфигурацию",
+      "mentorship": "Наставничество"
+    },
+    "sell_placeholder": "У вас пока нет конфигураций для продажи",
+    "mentorship_placeholder": "Список менторов будет доступен скоро"
+  },
+  "Finance": {
+    "title": "Финансы",
+    "description": "Управление балансом и оплата комиссий",
+    "total_balance": "Общий Баланс",
+    "refill": "Пополнить баланс",
+    "commission_paid": "Оплачено комиссии",
+    "commission_period": "В этом месяце",
+    "transactions_title": "История транзакций",
+    "no_transactions": "Транзакций не найдено"
   }
 }

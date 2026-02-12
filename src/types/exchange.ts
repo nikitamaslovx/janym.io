@@ -1,6 +1,6 @@
 import type { InferSelectModel } from 'drizzle-orm';
 
-import { exchangeCredentialsSchema } from '@/models/Schema';
+import type { exchangeCredentialsSchema } from '@/models/Schema';
 
 export type ExchangeCredentials = InferSelectModel<typeof exchangeCredentialsSchema>;
 
@@ -23,26 +23,26 @@ export type Exchange =
   | 'curve'
   | 'other';
 
-export interface ExchangeCredentialsInput {
+export type ExchangeCredentialsInput = {
   exchange: Exchange;
   apiKey: string;
   apiSecret: string;
   passphrase?: string;
   isTestnet?: boolean;
-}
+};
 
-export interface ExchangeCredentialsEncrypted {
+export type ExchangeCredentialsEncrypted = {
   exchange: Exchange;
   apiKeyEncrypted: string;
   apiSecretEncrypted: string;
   passphraseEncrypted?: string;
   isTestnet: boolean;
-}
+};
 
-export interface ExchangeCredentialsDecrypted {
+export type ExchangeCredentialsDecrypted = {
   exchange: Exchange;
   apiKey: string;
   apiSecret: string;
   passphrase?: string;
   isTestnet: boolean;
-}
+};

@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import type { Buffer } from 'node:buffer';
+
 import mqtt from 'mqtt';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Card,
@@ -20,9 +21,9 @@ import {
 } from '@/components/ui/select';
 import type { BotLog } from '@/types/metrics';
 
-interface BotLogsViewerProps {
+type BotLogsViewerProps = {
   botId: string;
-}
+};
 
 export const BotLogsViewer = ({ botId }: BotLogsViewerProps) => {
   const [logs, setLogs] = useState<BotLog[]>([]);
@@ -44,7 +45,7 @@ export const BotLogsViewer = ({ botId }: BotLogsViewerProps) => {
       client.subscribe(`hbot/${botId}/logs/+`);
     });
 
-    client.on('message', (topic, message) => {
+    client.on('message', (_topic: string, message: Buffer) => {
       try {
         const payload = JSON.parse(message.toString());
         const log: BotLog = {
@@ -56,7 +57,7 @@ export const BotLogsViewer = ({ botId }: BotLogsViewerProps) => {
           createdAt: new Date(),
         };
 
-        setLogs((prev) => [log, ...prev].slice(0, 1000)); // Keep last 1000 logs
+        setLogs(prev => [log, ...prev].slice(0, 1000)); // Keep last 1000 logs
       } catch (error) {
         console.error('Failed to parse log message:', error);
       }
@@ -113,8 +114,8 @@ export const BotLogsViewer = ({ botId }: BotLogsViewerProps) => {
             </span>
           </div>
         </div>
-        <div className="flex gap-2 mt-4">
-          <Select value={filterLevel} onValueChange={(value) => setFilterLevel(value as any)}>
+        <div className="mt-4 flex gap-2">
+          <Select value={filterLevel} onValueChange={value => setFilterLevel(value as any)}>
             <SelectTrigger className="w-[150px]">
               <SelectValue />
             </SelectTrigger>
@@ -129,40 +130,42 @@ export const BotLogsViewer = ({ botId }: BotLogsViewerProps) => {
             type="text"
             placeholder="Search logs..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-[400px] overflow-y-auto space-y-2">
-          {filteredLogs.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No logs found</div>
-          ) : (
-            filteredLogs.map((log) => (
-              <div
-                key={log.id}
-                className={`p-3 rounded-md border ${getLevelColor(log.level)}`}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-medium uppercase">{log.level}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(log.createdAt).toLocaleString()}
-                      </span>
+        <div className="h-[400px] space-y-2 overflow-y-auto">
+          {filteredLogs.length === 0
+            ? (
+                <div className="py-8 text-center text-muted-foreground">No logs found</div>
+              )
+            : (
+                filteredLogs.map(log => (
+                  <div
+                    key={log.id}
+                    className={`rounded-md border p-3 ${getLevelColor(log.level)}`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="mb-1 flex items-center gap-2">
+                          <span className="text-xs font-medium uppercase">{log.level}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(log.createdAt).toLocaleString()}
+                          </span>
+                        </div>
+                        <p className="text-sm">{log.message}</p>
+                        {log.metadata && (
+                          <pre className="mt-2 text-xs opacity-75">
+                            {JSON.stringify(log.metadata, null, 2)}
+                          </pre>
+                        )}
+                      </div>
                     </div>
-                    <p className="text-sm">{log.message}</p>
-                    {log.metadata && (
-                      <pre className="text-xs mt-2 opacity-75">
-                        {JSON.stringify(log.metadata, null, 2)}
-                      </pre>
-                    )}
                   </div>
-                </div>
-              </div>
-            ))
-          )}
+                ))
+              )}
         </div>
       </CardContent>
     </Card>

@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -13,12 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+
 import { CredentialForm } from './CredentialForm';
 
-interface Credential {
+type Credential = {
   exchange: string;
   isTestnet: boolean;
-}
+};
 
 export const CredentialsManager = () => {
   const t = useTranslations('CredentialsManager');
@@ -124,7 +124,7 @@ export const CredentialsManager = () => {
       )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {credentials.map((cred) => (
+        {credentials.map(cred => (
           <Card key={cred.exchange}>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { mqttService } from '@/services/mqtt/MQTTService';
 import { redisService } from '@/services/cache/RedisService';
+import { mqttService } from '@/services/mqtt/MQTTService';
 
 export async function GET() {
   const mqttStatus = mqttService.getConnectionStatus();

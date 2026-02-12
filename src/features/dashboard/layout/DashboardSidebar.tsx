@@ -1,11 +1,12 @@
 'use client';
 
-import { ArrowRightLeft, LayoutDashboard, LineChart, Menu, Wallet } from 'lucide-react';
+import { BookOpen, Bot, LayoutDashboard, LineChart, Menu, ShoppingCart, User, Users, Wallet } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 
@@ -21,31 +22,40 @@ export const DashboardSidebar = () => {
       label: t('home'),
     },
     {
-      href: '/dashboard/strategies',
+      href: '/dashboard/bots', // We will reuse strategies page or create new
+      icon: Bot,
+      label: t('bots'),
+    },
+    {
+      href: '/dashboard/marketplace',
+      icon: ShoppingCart,
+      label: t('marketplace'),
+    },
+    {
+      href: '/dashboard/statistics',
       icon: LineChart,
-      label: t('strategies'),
+      label: t('statistics'),
     },
     {
-      href: '/dashboard/portfolio',
+      href: '/dashboard/finance',
       icon: Wallet,
-      label: t('portfolio'),
+      label: t('finance'),
     },
     {
-      href: '/dashboard/exchanges',
-      icon: ArrowRightLeft,
-      label: t('exchanges'),
+      href: '/dashboard/referral',
+      icon: Users,
+      label: t('referral'),
     },
-    // Org links removed for B2C flow
-    // {
-    //   href: '/dashboard/organization-profile/organization-members',
-    //   icon: Users,
-    //   label: t('members'),
-    // },
-    // {
-    //   href: '/dashboard/organization-profile',
-    //   icon: Settings,
-    //   label: t('settings'),
-    // },
+    {
+      href: '/docs', // External link or internal docs
+      icon: BookOpen,
+      label: t('knowledge_base'),
+    },
+    {
+      href: '/dashboard/user-profile',
+      icon: User,
+      label: t('profile'),
+    },
   ];
 
   return (
@@ -104,6 +114,9 @@ export const DashboardSidebar = () => {
           </div>
 
           <div className="border-t bg-card/30 p-4">
+            <div className="mb-2 flex justify-end">
+              <ThemeToggle />
+            </div>
             <div className="rounded-xl border border-primary/10 bg-gradient-to-br from-primary/10 to-blue-600/10 p-4">
               <h4 className="mb-1 text-sm font-semibold">Pro Plan</h4>
               <p className="mb-3 text-xs text-muted-foreground">Upgrade for more strategies.</p>
@@ -119,6 +132,13 @@ export const DashboardSidebar = () => {
         <div
           className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm md:hidden"
           onClick={() => setIsMobileOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setIsMobileOpen(false);
+            }
+          }}
+          role="button"
+          tabIndex={0}
         />
       )}
     </>

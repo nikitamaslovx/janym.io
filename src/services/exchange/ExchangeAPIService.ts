@@ -4,20 +4,21 @@
  * Uses CCXT library for unified exchange interface
  */
 
-import type { ExchangeCredentialsDecrypted } from './types';
 import type { Exchange } from '@/types/exchange';
 
-interface ExchangeBalance {
+import type { ExchangeCredentialsDecrypted } from './types';
+
+type ExchangeBalance = {
   total: number;
   free: number;
   used: number;
   currency: string;
-}
+};
 
-interface ExchangeAccountInfo {
+type ExchangeAccountInfo = {
   balances: ExchangeBalance[];
   permissions: string[];
-}
+};
 
 class ExchangeAPIService {
   /**
@@ -155,9 +156,9 @@ class ExchangeAPIService {
     return {
       balances: (data.balances || []).map((b: any) => ({
         currency: b.asset,
-        total: parseFloat(b.free) + parseFloat(b.locked),
-        free: parseFloat(b.free),
-        used: parseFloat(b.locked),
+        total: Number.parseFloat(b.free) + Number.parseFloat(b.locked),
+        free: Number.parseFloat(b.free),
+        used: Number.parseFloat(b.locked),
       })),
       permissions: data.permissions || [],
     };
@@ -249,7 +250,9 @@ class ExchangeAPIService {
       }
 
       const ExchangeClass = ccxt[exchange];
-      if (!ExchangeClass) return null;
+      if (!ExchangeClass) {
+        return null;
+      }
 
       const exchangeInstance = new ExchangeClass({
         apiKey: credentials?.apiKey,

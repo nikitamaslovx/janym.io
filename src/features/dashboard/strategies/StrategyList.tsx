@@ -70,8 +70,8 @@ export const StrategyList = () => {
         const botId = topic.split('/')[1];
         const payload = JSON.parse(message.toString());
 
-        setBots((prevBots) =>
-          prevBots.map((bot) =>
+        setBots(prevBots =>
+          prevBots.map(bot =>
             bot.id === botId ? { ...bot, status: payload.status as Bot['status'] } : bot,
           ),
         );
@@ -93,7 +93,7 @@ export const StrategyList = () => {
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
 
   const sendCommand = async (botId: string, action: 'start' | 'stop') => {
-    setLoadingMap((prev) => ({ ...prev, [botId]: true }));
+    setLoadingMap(prev => ({ ...prev, [botId]: true }));
     try {
       const response = await fetch(`/api/bots/${botId}/commands`, {
         method: 'POST',
@@ -107,8 +107,8 @@ export const StrategyList = () => {
       }
 
       // Optimistic update
-      setBots((prev) =>
-        prev.map((b) =>
+      setBots(prev =>
+        prev.map(b =>
           b.id === botId
             ? { ...b, status: action === 'start' ? ('running' as const) : ('stopped' as const) }
             : b,
@@ -118,7 +118,7 @@ export const StrategyList = () => {
       console.error('Error sending command:', error);
       alert(error instanceof Error ? error.message : 'Failed to send command');
     } finally {
-      setLoadingMap((prev) => ({ ...prev, [botId]: false }));
+      setLoadingMap(prev => ({ ...prev, [botId]: false }));
     }
   };
 
@@ -137,7 +137,7 @@ export const StrategyList = () => {
             <p className="text-muted-foreground">{t('description')}</p>
           </div>
         </div>
-        <div className="text-center py-8">
+        <div className="py-8 text-center">
           <p className="text-muted-foreground">Loading bots...</p>
         </div>
       </div>
@@ -153,7 +153,7 @@ export const StrategyList = () => {
             <p className="text-muted-foreground">{t('description')}</p>
           </div>
         </div>
-        <div className="text-center py-8">
+        <div className="py-8 text-center">
           <p className="text-destructive">{error}</p>
           <Button onClick={() => window.location.reload()} className="mt-4">
             Retry
@@ -183,7 +183,7 @@ export const StrategyList = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {bots.map((bot) => (
+        {bots.map(bot => (
           <Card key={bot.id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{bot.name}</CardTitle>
@@ -202,7 +202,7 @@ export const StrategyList = () => {
             <CardContent>
               <div className="text-2xl font-bold">{bot.tradingPair}</div>
               <p className="text-xs text-muted-foreground">{bot.strategyType}</p>
-              <p className="text-xs text-muted-foreground mt-1">{bot.exchange}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{bot.exchange}</p>
               <div className="mt-4 flex gap-2">
                 <Button
                   size="sm"
@@ -235,7 +235,7 @@ export const StrategyList = () => {
         ))}
 
         {/* Add New Bot Card */}
-        <Card className="flex flex-col items-center justify-center border-dashed py-10 opacity-70 hover:opacity-100 cursor-pointer">
+        <Card className="flex cursor-pointer flex-col items-center justify-center border-dashed py-10 opacity-70 hover:opacity-100">
           <CardContent>
             <Button variant="outline" onClick={handleAddBot}>
               {t('add_bot')}

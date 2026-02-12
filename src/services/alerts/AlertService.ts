@@ -1,7 +1,7 @@
-import { metricsService } from '../metrics/MetricsService';
 import { botService } from '../bot/BotService';
+import { metricsService } from '../metrics/MetricsService';
 
-export interface AlertRule {
+export type AlertRule = {
   id: string;
   botId?: string; // If null, applies to all bots
   organizationId: string;
@@ -12,7 +12,7 @@ export interface AlertRule {
   };
   enabled: boolean;
   channels: ('email' | 'slack' | 'telegram')[];
-}
+};
 
 class AlertService {
   private rules: AlertRule[] = [];
@@ -26,7 +26,7 @@ class AlertService {
 
       // Check general alerts
       const generalRules = this.rules.filter(
-        (r) => r.organizationId === orgId && !r.botId && r.enabled,
+        r => r.organizationId === orgId && !r.botId && r.enabled,
       );
       await this.checkGeneralAlerts(bot.id, generalRules);
     }
@@ -34,7 +34,7 @@ class AlertService {
 
   private async checkBotAlerts(botId: string, orgId: string) {
     const botRules = this.rules.filter(
-      (r) => r.organizationId === orgId && r.botId === botId && r.enabled,
+      r => r.organizationId === orgId && r.botId === botId && r.enabled,
     );
 
     if (botRules.length === 0) {
@@ -123,11 +123,11 @@ class AlertService {
   }
 
   async removeRule(ruleId: string) {
-    this.rules = this.rules.filter((r) => r.id !== ruleId);
+    this.rules = this.rules.filter(r => r.id !== ruleId);
   }
 
   async getRules(orgId: string): Promise<AlertRule[]> {
-    return this.rules.filter((r) => r.organizationId === orgId);
+    return this.rules.filter(r => r.organizationId === orgId);
   }
 }
 

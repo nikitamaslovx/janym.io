@@ -7,6 +7,7 @@ import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
 import { DemoBadge } from '@/components/DemoBadge';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { AllLocales, AppConfig } from '@/utils/AppConfig';
 
 export const metadata: Metadata = {
@@ -67,24 +68,30 @@ export default function RootLayout(props: {
   return (
     <html lang={props.params.locale} suppressHydrationWarning>
       <body className="bg-background text-foreground antialiased" suppressHydrationWarning>
-        {/* PRO: Dark mode support for Shadcn UI */}
-        <ClerkProvider
-          localization={clerkLocale}
-          signInUrl={signInUrl}
-          signUpUrl={signUpUrl}
-          signInFallbackRedirectUrl={dashboardUrl}
-          signUpFallbackRedirectUrl={dashboardUrl}
-          afterSignOutUrl={afterSignOutUrl}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <NextIntlClientProvider
-            locale={props.params.locale}
-            messages={messages}
+          <ClerkProvider
+            localization={clerkLocale}
+            signInUrl={signInUrl}
+            signUpUrl={signUpUrl}
+            signInFallbackRedirectUrl={dashboardUrl}
+            signUpFallbackRedirectUrl={dashboardUrl}
+            afterSignOutUrl={afterSignOutUrl}
           >
-            {props.children}
+            <NextIntlClientProvider
+              locale={props.params.locale}
+              messages={messages}
+            >
+              {props.children}
 
-            <DemoBadge />
-          </NextIntlClientProvider>
-        </ClerkProvider>
+              <DemoBadge />
+            </NextIntlClientProvider>
+          </ClerkProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -192,12 +192,20 @@ export const BotDashboard = () => {
           </Badge>
           {bot.status === 'running'
             ? (
-                <Button variant="destructive" onClick={handleStop}>
-                  Stop
-                </Button>
+                <>
+                  <Button variant="destructive" onClick={handleStop} size="sm">
+                    {t('controls.stop')}
+                  </Button>
+                  <Button variant="destructive" onClick={() => {}} size="sm">
+                    {t('controls.forceStop')}
+                  </Button>
+                  <Button variant="outline" onClick={() => {}} size="sm">
+                    {t('controls.cancelCycle')}
+                  </Button>
+                </>
               )
             : (
-                <Button onClick={handleStart}>Start</Button>
+                <Button onClick={handleStart} size="sm">{t('controls.start')}</Button>
               )}
         </div>
       </div>

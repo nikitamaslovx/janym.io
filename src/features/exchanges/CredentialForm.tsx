@@ -1,10 +1,10 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -55,11 +55,11 @@ const credentialFormSchema = z.object({
 
 type CredentialFormValues = z.infer<typeof credentialFormSchema>;
 
-interface CredentialFormProps {
+type CredentialFormProps = {
   exchange?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
-}
+};
 
 export const CredentialForm = ({ exchange, onSuccess, onCancel }: CredentialFormProps) => {
   const t = useTranslations('CredentialForm');
@@ -119,9 +119,9 @@ export const CredentialForm = ({ exchange, onSuccess, onCancel }: CredentialForm
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {exchanges.map((ex) => (
+                  {exchanges.map(ex => (
                     <SelectItem key={ex} value={ex}>
-                      {ex.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                      {ex.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </SelectItem>
                   ))}
                 </SelectContent>

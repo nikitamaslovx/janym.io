@@ -31,7 +31,7 @@
 **Рекомендуемый подход:** Микросервисная архитектура с отдельным Gateway Service для Hummingbot
 
 ```
-Frontend (Next.js) 
+Frontend (Next.js)
     ↓
 API Gateway (Next.js API Routes)
     ↓

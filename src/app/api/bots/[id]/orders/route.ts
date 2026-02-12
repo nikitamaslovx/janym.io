@@ -18,8 +18,8 @@ export async function GET(
     const { id } = await params;
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || undefined;
-    const limit = parseInt(searchParams.get('limit') || '100', 10);
-    const offset = parseInt(searchParams.get('offset') || '0', 10);
+    const limit = Number.parseInt(searchParams.get('limit') || '100', 10);
+    const offset = Number.parseInt(searchParams.get('offset') || '0', 10);
 
     // Verify bot belongs to organization
     const bot = await botService.getBot(id, orgId);

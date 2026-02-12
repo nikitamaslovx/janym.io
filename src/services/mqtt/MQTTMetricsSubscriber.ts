@@ -1,7 +1,7 @@
-import { mqttService } from './MQTTService';
 import { metricsService } from '../metrics/MetricsService';
+import { mqttService } from './MQTTService';
 
-interface MetricsPayload {
+type MetricsPayload = {
   timestamp?: string;
   balance?: {
     total?: number;
@@ -20,9 +20,9 @@ interface MetricsPayload {
     cancelled_24h?: number;
     volume_24h?: number;
   };
-}
+};
 
-interface OrderPayload {
+type OrderPayload = {
   exchange_order_id?: string;
   trading_pair: string;
   order_type: 'buy' | 'sell';
@@ -32,13 +32,13 @@ interface OrderPayload {
   filled_quantity?: number;
   status: 'open' | 'filled' | 'cancelled' | 'failed';
   exchange_timestamp?: string;
-}
+};
 
-interface LogPayload {
+type LogPayload = {
   level: 'info' | 'warning' | 'error';
   message: string;
   metadata?: Record<string, unknown>;
-}
+};
 
 class MQTTMetricsSubscriber {
   private isSubscribed = false;

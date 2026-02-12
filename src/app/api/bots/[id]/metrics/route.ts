@@ -30,7 +30,8 @@ export async function GET(
     const historicalMetrics = await metricsService.getHistoricalMetrics(id, timeframe);
     const latestMetrics = await metricsService.getLatestMetrics(id);
     const pnl = await metricsService.calculatePnL(id, 30);
-    const risk = await metricsService.calculateRiskMetrics(id, timeframe);
+    // Optimize: reuse historicalMetrics for risk calculation since timeframe is the same
+    const risk = await metricsService.calculateRiskMetrics(id, timeframe, historicalMetrics);
 
     return NextResponse.json({
       historical: historicalMetrics,

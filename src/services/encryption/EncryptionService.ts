@@ -1,7 +1,5 @@
 import crypto from 'node:crypto';
 
-import { Env } from '@/libs/Env';
-
 class EncryptionService {
   private readonly algorithm = 'aes-256-gcm';
   private readonly keyLength = 32; // 256 bits

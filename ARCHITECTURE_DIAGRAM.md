@@ -35,7 +35,7 @@ graph TB
     subgraph "Hummingbot Layer"
         GATEWAY[Hummingbot Gateway Service<br/>Python/FastAPI or Node.js]
         ORCHESTRATOR[Container Orchestrator<br/>Docker/Kubernetes]
-        
+
         subgraph "Bot Instances"
             BOT1[Hummingbot<br/>Container 1<br/>Bot ID: 1]
             BOT2[Hummingbot<br/>Container 2<br/>Bot ID: 2]

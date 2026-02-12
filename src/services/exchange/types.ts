@@ -1,7 +1,7 @@
 import type {
-  ExchangeCredentialsInput,
-  ExchangeCredentialsDecrypted,
   Exchange,
+  ExchangeCredentialsDecrypted,
+  ExchangeCredentialsInput,
 } from '@/types/exchange';
 
-export type { ExchangeCredentialsInput, ExchangeCredentialsDecrypted, Exchange };
+export type { Exchange, ExchangeCredentialsDecrypted, ExchangeCredentialsInput };

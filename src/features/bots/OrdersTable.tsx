@@ -10,14 +10,14 @@ import {
 } from '@/components/ui/table';
 import type { Order } from '@/types/metrics';
 
-interface OrdersTableProps {
+type OrdersTableProps = {
   orders: Order[];
-}
+};
 
 export const OrdersTable = ({ orders }: OrdersTableProps) => {
   if (orders.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
+      <div className="py-8 text-center text-muted-foreground">
         No orders found
       </div>
     );
@@ -39,7 +39,7 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
+          {orders.map(order => (
             <TableRow key={order.id}>
               <TableCell>
                 {new Date(order.createdAt).toLocaleString()}

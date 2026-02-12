@@ -19,11 +19,11 @@ import {
 } from '@/components/ui/card';
 import type { MetricPoint } from '@/types/metrics';
 
-interface BotMetricsChartProps {
+type BotMetricsChartProps = {
   data: MetricPoint[];
   title?: string;
   description?: string;
-}
+};
 
 export const BotMetricsChart = ({
   data,
@@ -56,14 +56,14 @@ export const BotMetricsChart = ({
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                tickFormatter={value => new Date(value).toLocaleDateString()}
               />
               <YAxis
                 stroke="#888888"
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `$${value.toFixed(2)}`}
+                tickFormatter={value => `$${value.toFixed(2)}`}
               />
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Tooltip
@@ -72,8 +72,8 @@ export const BotMetricsChart = ({
                   border: '1px solid hsl(var(--border))',
                   borderRadius: '6px',
                 }}
-                labelFormatter={(value) => new Date(value).toLocaleString()}
-                formatter={(value: number) => `$${value.toFixed(2)}`}
+                labelFormatter={value => new Date(value).toLocaleString()}
+                formatter={(value: any) => `$${Number(value).toFixed(2)}`}
               />
               <Area
                 type="monotone"

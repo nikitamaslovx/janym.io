@@ -20,7 +20,9 @@ export const Navbar = () => {
         logo={<Logo />}
         rightMenu={(
           <>
-            {/* PRO: Dark mode toggle button */}
+            {/* <li data-fade>
+              <ThemeToggle />
+            </li> */}
             <li data-fade>
               <LocaleSwitcher />
             </li>

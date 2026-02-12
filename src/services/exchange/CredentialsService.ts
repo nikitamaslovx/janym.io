@@ -1,15 +1,15 @@
-import { eq, and } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
 import { exchangeCredentialsSchema, organizationSchema } from '@/models/Schema';
 import { encryptionService } from '@/services/encryption/EncryptionService';
-import { exchangeAPIService } from './ExchangeAPIService';
-
-import type {
-  ExchangeCredentialsInput,
-  ExchangeCredentialsDecrypted,
-} from './types';
 import type { Exchange } from '@/types/exchange';
+
+import { exchangeAPIService } from './ExchangeAPIService';
+import type {
+  ExchangeCredentialsDecrypted,
+  ExchangeCredentialsInput,
+} from './types';
 
 export class CredentialsService {
   async storeCredentials(
