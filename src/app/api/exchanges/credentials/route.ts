@@ -14,13 +14,14 @@ const storeCredentialsSchema = z.object({
 
 export async function GET() {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const credentials = await credentialsService.listCredentials(orgId);
+    const credentials = await credentialsService.listCredentials(effectiveOrgId);
 
     return NextResponse.json({ credentials });
   } catch (error) {
@@ -34,9 +35,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -44,7 +46,7 @@ export async function POST(request: Request) {
     const validatedData = storeCredentialsSchema.parse(body);
 
     // Validate credentials before storing
-    const isValid = await credentialsService.validateCredentials(validatedData);
+    const isValid = await credentialsService.validateCredentials(validatedData as any);
     if (!isValid) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
@@ -53,9 +55,9 @@ export async function POST(request: Request) {
     }
 
     await credentialsService.storeCredentials(
-      orgId,
+      effectiveOrgId,
       validatedData.exchange,
-      validatedData,
+      validatedData as any,
     );
 
     return NextResponse.json({ success: true }, { status: 201 });

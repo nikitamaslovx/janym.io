@@ -277,5 +277,36 @@
     "save_button": "Сохранить",
     "cancel_button": "Отмена",
     "saving": "Сохранение..."
+  },
+  "AccountSummary": {
+    "accountInfo": "Информация об аккаунте",
+    "copyId": "Копировать ID",
+    "autoUpdate": "Авто обновление",
+    "status": "Статус",
+    "active": "Активен",
+    "accountBalance": "Баланс аккаунта",
+    "replenish": "Пополнить баланс"
+  },
+  "BotStatusOverview": {
+    "totalBots": "Всего ботов",
+    "create": "Создать нового бота",
+    "running": "Запущено",
+    "stopped": "Выключено",
+    "errors": "С ошибкой"
+  },
+  "IncomeStats": {
+    "period24h": "Доход за 24 часа",
+    "period7d": "Доход за неделю",
+    "period30d": "Доход за месяц",
+    "totalIncome": "Общий доход",
+    "dealsCompleted": "Сделок завершено"
+  },
+  "BotMarketplace": {
+    "title": "Готовые боты",
+    "viewAll": "Посмотреть все",
+    "pnl": "PNL %",
+    "minDeposit": "Депозит",
+    "risk": "Уровень Риска",
+    "copyBot": "Скопировать"
   }
 }

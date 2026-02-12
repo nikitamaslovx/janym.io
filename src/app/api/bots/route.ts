@@ -23,13 +23,14 @@ const createBotSchema = z.object({
 
 export async function GET() {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const bots = await botService.listBots(orgId);
+    const bots = await botService.listBots(effectiveOrgId);
 
     return NextResponse.json({ bots });
   } catch (error) {
@@ -43,9 +44,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -54,7 +56,7 @@ export async function POST(request: Request) {
 
     const bot = await botService.createBot({
       ...validatedData,
-      organizationId: orgId,
+      organizationId: effectiveOrgId,
     });
 
     return NextResponse.json({ bot }, { status: 201 });

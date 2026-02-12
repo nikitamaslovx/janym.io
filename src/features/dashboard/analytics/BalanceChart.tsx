@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 import {
   Area,
   AreaChart,
@@ -19,19 +20,36 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-const data = [
-  { date: 'Jan 01', value: 1000 },
-  { date: 'Jan 05', value: 1200 },
-  { date: 'Jan 10', value: 1150 },
-  { date: 'Jan 15', value: 1600 },
-  { date: 'Jan 20', value: 1800 },
-  { date: 'Jan 25', value: 2400 },
-  { date: 'Jan 30', value: 2100 },
-  { date: 'Feb 05', value: 2800 },
-];
-
-export const BalanceChart = () => {
+const BalanceChartContent = () => {
   const t = useTranslations('BalanceChart');
+  const [data, setData] = useState<{ date: string; value: number }[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/portfolio/history?timeframe=30d');
+        if (response.ok) {
+          const result = await response.json();
+          setData(result.history);
+        }
+      } catch (error) {
+        console.error('Failed to fetch portfolio history', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Card className="col-span-4 flex h-[430px] items-center justify-center">
+        <div className="size-8 animate-spin rounded-full border-b-2 border-primary" />
+      </Card>
+    );
+  }
 
   return (
     <Card className="col-span-4">
@@ -78,4 +96,8 @@ export const BalanceChart = () => {
       </CardContent>
     </Card>
   );
+};
+
+export const BalanceChart = () => {
+  return <BalanceChartContent />;
 };

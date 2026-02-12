@@ -5,13 +5,14 @@ import { metricsService } from '@/services/metrics/MetricsService';
 
 export async function GET() {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const portfolio = await metricsService.getPortfolioValue(orgId);
+    const portfolio = await metricsService.getPortfolioValue(effectiveOrgId);
 
     return NextResponse.json({ portfolio });
   } catch (error) {

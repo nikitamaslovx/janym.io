@@ -10,9 +10,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -21,7 +22,7 @@ export async function GET(
     const timeframe = (searchParams.get('timeframe') || '1d') as Timeframe;
 
     // Verify bot belongs to organization
-    const bot = await botService.getBot(id, orgId);
+    const bot = await botService.getBot(id, effectiveOrgId);
     if (!bot) {
       return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
     }

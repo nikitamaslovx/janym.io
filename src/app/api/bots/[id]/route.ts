@@ -24,18 +24,19 @@ const updateBotSchema = z.object({
 });
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id } = await params;
-    const bot = await botService.getBot(id, orgId);
+    const bot = await botService.getBot(id, effectiveOrgId);
 
     if (!bot) {
       return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
@@ -56,9 +57,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -68,7 +70,7 @@ export async function PUT(
 
     const bot = await botService.updateBot({
       id,
-      organizationId: orgId,
+      organizationId: effectiveOrgId,
       ...validatedData,
     });
 
@@ -94,18 +96,19 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { orgId } = await auth();
+    const { orgId, userId } = await auth();
+    const effectiveOrgId = orgId || userId;
 
-    if (!orgId) {
+    if (!effectiveOrgId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id } = await params;
-    await botService.deleteBot(id, orgId);
+    await botService.deleteBot(id, effectiveOrgId);
 
     return NextResponse.json({ success: true });
   } catch (error) {

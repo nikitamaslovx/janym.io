@@ -490,6 +490,68 @@ export class MetricsService {
       totalTrades,
     };
   }
+
+  async getPortfolioHistory(
+    orgId: string,
+    timeframe: Timeframe = '30d',
+  ): Promise<MetricPoint[]> {
+    // Get all bots for organization
+    const bots = await db
+      .select({ id: botsSchema.id })
+      .from(botsSchema)
+      .where(eq(botsSchema.organizationId, orgId));
+
+    if (bots.length === 0) {
+      return [];
+    }
+
+    // Fetch history for each bot
+    const allHistories = await Promise.all(
+      bots.map(bot => this.getHistoricalMetrics(bot.id, timeframe)),
+    );
+
+    // Aggregate by timestamp (formatting to hour/day level to align)
+    // For simplicity, we'll assume metrics are roughly aligned or we prioritize one timeline
+    // A better approach for production: bucketing by time intervals.
+
+    const timeMap = new Map<number, MetricPoint>();
+
+    allHistories.flat().forEach((point) => {
+      // Round timestamp to nearest hour to align data points from different bots
+      const timestamp = new Date(point.timestamp);
+      timestamp.setMinutes(0, 0, 0);
+      const key = timestamp.getTime();
+
+      if (!timeMap.has(key)) {
+        timeMap.set(key, {
+          timestamp: new Date(key),
+          balanceUsd: 0,
+          totalPnl: 0,
+          totalPnlPct: 0, // Weighted average or simple sum? PnL $ is sum.
+        });
+      }
+
+      const existing = timeMap.get(key)!;
+      existing.balanceUsd += point.balanceUsd;
+      existing.totalPnl += point.totalPnl;
+    });
+
+    // Convert map to array and sort
+    const aggregated = Array.from(timeMap.values()).sort(
+      (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
+    );
+
+    // Recalculate PnL % based on aggregated totals (if possible) or just leave as 0 for now
+    // PnlPct = (TotalPnl / (TotalBalance - TotalPnl)) * 100 roughly
+    aggregated.forEach((point) => {
+      const initialBasis = point.balanceUsd - point.totalPnl;
+      if (initialBasis > 0) {
+        point.totalPnlPct = (point.totalPnl / initialBasis) * 100;
+      }
+    });
+
+    return aggregated;
+  }
 }
 
 export const metricsService = new MetricsService();

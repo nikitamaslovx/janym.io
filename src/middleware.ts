@@ -40,21 +40,22 @@ export default function middleware(
       });
     }
 
-    const authObj = await auth();
+    // const authObj = await auth();
 
-    if (
-      authObj.userId
-      && !authObj.orgId
-      && req.nextUrl.pathname.includes('/dashboard')
-      && !req.nextUrl.pathname.endsWith('/organization-selection')
-    ) {
-      const orgSelection = new URL(
-        '/onboarding/organization-selection',
-        req.url,
-      );
-
-      return NextResponse.redirect(orgSelection);
-    }
+    // Org selection redirect removed for B2C flow
+    // if (
+    //   authObj.userId
+    //   && !authObj.orgId
+    //   && req.nextUrl.pathname.includes('/dashboard')
+    //   && !req.nextUrl.pathname.endsWith('/organization-selection')
+    // ) {
+    //   const orgSelection = new URL(
+    //     '/onboarding/organization-selection',
+    //     req.url,
+    //   );
+    //
+    //   return NextResponse.redirect(orgSelection);
+    // }
 
     if (req.nextUrl.pathname.startsWith('/api')) {
       return NextResponse.next();

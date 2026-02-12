@@ -15,8 +15,9 @@ export const POST = async (
   { params }: { params: { id: string } },
 ) => {
   const { userId, orgId } = await auth();
+  const effectiveOrgId = orgId || userId;
 
-  if (!userId || !orgId) {
+  if (!effectiveOrgId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -26,7 +27,7 @@ export const POST = async (
 
     const result = await botService.runBacktest(
       params.id,
-      orgId,
+      effectiveOrgId,
       validated.startDate,
       validated.endDate,
       validated.config,
