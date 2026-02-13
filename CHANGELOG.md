@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/nikitamaslovx/janym.io/compare/v1.6.0...v1.7.0) (2026-02-13)
+
+
+### Features
+
+* user profile updates, new UI components and wallet features ([81113b5](https://github.com/nikitamaslovx/janym.io/commit/81113b5fafbf53b293cb6fa3b83655d88416dac8))
+
 # [1.6.0](https://github.com/nikitamaslovx/janym.io/compare/v1.5.0...v1.6.0) (2026-02-12)
 
 
