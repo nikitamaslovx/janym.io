@@ -116,7 +116,8 @@
     "bots": "Боты",
     "marketplace": "Маркетплейс",
     "statistics": "Статистика",
-    "finance": "Финансы",
+    "wallets": "Кошельки",
+    "api_keys": "API Ключи",
     "referral": "Реферальная программа",
     "knowledge_base": "База знаний",
     "profile": "Профиль",
@@ -139,7 +140,211 @@
   },
   "UserProfile": {
     "title_bar": "Профиль пользователя",
-    "title_bar_description": "Управление профилем"
+    "title_bar_description": "Управление профилем",
+    "nav": {
+      "account_info": "Информация об аккаунте",
+      "commissions": "Комиссии",
+      "marketplace_settings": "Настройки Маркетплейс",
+      "balance_history": "История операций баланса аккаунта",
+      "referral_program": "Реферальная программа",
+      "payout_request": "Запрос выплаты",
+      "external_accounts": "Привязка сторонних аккаунтов",
+      "notifications": "Уведомления",
+      "password": "Пароль"
+    },
+    "account_summary": {
+      "status": "Статус",
+      "id": "ID",
+      "balance": "Баланс аккаунта",
+      "replenish": "Пополнить баланс",
+      "history": "История операций",
+      "paused": "Приостановлен",
+      "knowledge_base": "База знаний",
+      "consultation": "Бесплатная онлайн-консультация",
+      "video_lessons": "Обучающие видеоматериалы"
+    },
+    "basic_info": {
+      "title": "Основная информация",
+      "email": "E-mail",
+      "full_name": "Полное имя",
+      "company": "Компания",
+      "company_placeholder": "Введите название Компании",
+      "timezone": "Часовой пояс",
+      "phone": "Номер телефона",
+      "language": "Язык интерфейса",
+      "additional_contacts": "Дополнительные контакты",
+      "add_contact": "Добавить контакт"
+    },
+    "commissions": {
+      "title": "Комиссии",
+      "rate": "Комиссия",
+      "ordinary": "обычные боты",
+      "usdm": "USDS-m фьючерсные боты",
+      "coinm": "COIN-m фьючерсные боты",
+      "marketplace": "маркетплейс",
+      "deducted": "В текущем месяце списано"
+    },
+    "marketplace_settings": {
+      "title": "Настройки Маркетплейс",
+      "mentorship": "Наставничество",
+      "i_want_to_be_mentor": "Я хочу быть наставником",
+      "price": "Стоимость одной услуги",
+      "contact": "Контакт для наставничества",
+      "description_hint": "Подробно опишите услуги, которые вы можете предоставлять в качестве наставника заинтересованному пользователю"
+    },
+    "balance_history": {
+      "title": "История операций баланса аккаунта",
+      "filters": {
+        "title": "Фильтры",
+        "period": "Период",
+        "today": "Сегодня",
+        "add_filters": "Добавить фильтры",
+        "apply": "Применить"
+      },
+      "table": {
+        "refresh": "Обновить",
+        "column_settings": "Настройка столбцов таблицы",
+        "search_placeholder": "Поиск",
+        "type": "Тип",
+        "status": "Статус",
+        "bot": "Бот",
+        "info": "Инфо",
+        "exchange": "Биржа",
+        "deal": "Сделка",
+        "income": "Доход со сделки",
+        "amount": "Сумма",
+        "created": "Создано",
+        "executed": "Исполнено",
+        "no_data": "No Data",
+        "rows_per_page": "Строк на страницу"
+      }
+    },
+    "referral": {
+      "title": "Реферальная программа",
+      "stats": {
+        "your_commissions": "Ваши комиссионные",
+        "attracted_users": "Привлечено пользователей",
+        "total_income": "Общий реферальный доход",
+        "total_paid": "Всего выплачено",
+        "available": "Доступно для выплаты"
+      },
+      "table": {
+        "ref_id": "Реф ID",
+        "reg_date": "Дата Регистрации",
+        "referrer": "Реферер",
+        "add_info": "Доп. Инфо",
+        "commission": "Комиссия"
+      },
+      "links": {
+        "title": "Реферальные ссылки",
+        "type_label": "Тип ссылки",
+        "select_placeholder": "Выберите"
+      },
+      "banners": {
+        "title": "Реферальные баннеры",
+        "size_label": "Размер баннера",
+        "available_label": "Доступные баннеры"
+      }
+    },
+    "payout": {
+      "title": "Запрос выплаты",
+      "transfer": {
+        "title": "Перевод средств с баланса другому пользователю",
+        "id_email": "ID/Email аккаунта",
+        "amount": "Сумма",
+        "comment": "Комментарий",
+        "send": "Отправить"
+      },
+      "withdraw": {
+        "title": "Запрос выплаты",
+        "wallet": "BTC кошелек",
+        "wallet_placeholder": "BTC кошелек для выплаты",
+        "amount": "Сумма",
+        "request": "Запросить выплату"
+      }
+    },
+    "external_accounts": {
+      "title": "Привязка сторонних аккаунтов",
+      "connect_title": "Привязать новый аккаунт",
+      "provider": "Выберите провайдер",
+      "table": {
+        "id": "ID",
+        "provider": "Провайдер",
+        "email": "Емэил",
+        "connected": "Подсоединен",
+        "action": "Действия"
+      }
+    },
+    "notifications": {
+      "title": "Уведомления",
+      "types": {
+        "tp_executed": "Исполнен тейк-профит ордер",
+        "grid_executed": "Исполнена вся сетка ордеров",
+        "sl_executed": "Исполнен Стоп-Лосс",
+        "errors": "Ошибки",
+        "balance": "Баланс",
+        "news": "Новости",
+        "bot_started": "Бот запустился",
+        "bot_stopped": "Бот остановился",
+        "tp_terminal": "Тейк-профит на Терминале",
+        "private_msgs": "Приватные Сообщения",
+        "market_sale": "Продажа в Маркетплейсе",
+        "mentor_sale": "Продажа Наставничества",
+        "api_expired": "Истечение Действия API ключа",
+        "loss_received": "Получен убыток",
+        "sim_completed": "Симуляция завершена",
+        "first_order": "Первый ордер исполнен"
+      },
+      "report": {
+        "title": "Отчет о Доходах",
+        "daily": "Ежедневный",
+        "weekly": "Еженедельный",
+        "monthly": "Ежемесячный"
+      },
+      "settings": {
+        "auto_delete": "Автоматически удалять WEB уведомления после",
+        "telegram": "Telegram уведомления",
+        "month": "1 Месяц"
+      }
+    },
+    "password_tab": {
+      "title": "Пароль",
+      "2fa": {
+        "title": "Тип двухфакторной аутентификации:",
+        "disabled": "Выключена",
+        "sms": "Через СМС",
+        "google": "Через Google Authenticator"
+      },
+      "form": {
+        "new_password": "Новый пароль:",
+        "new_password_placeholder": "Введите новый пароль",
+        "confirm_password": "Повторно введите новый пароль:",
+        "confirm_password_placeholder": "Повторно введите новый пароль"
+      }
+    },
+    "control_panel": {
+      "title": "Настройки Панели Управления",
+      "stats_period": "Варианты вывода статистики по доходу",
+      "stats_options": {
+        "days_1_7_30": "Последние 24 часа, последние 7 дней, последние 30 дней"
+      }
+    },
+    "blocks": {
+      "title": "Включенные блоки",
+      "revenue_bot_news": "Новости revenue bot",
+      "bot_stats": "Статистика работы ботов",
+      "profit_stats": "Статистика по профиту в системе",
+      "my_balances": "Мои балансы на биржах",
+      "tooltips": "Всплывающие подсказки",
+      "market_bots": "Готовые боты",
+      "chat_icon": "Отображать иконку чата при входе"
+    },
+    "advanced": {
+      "ip_addresses": "Укажите ваши IP адреса для сигналов",
+      "ip_placeholder": "например: 123.123.123.123, 123.123.123.123/32, 192.168.0.1/24, 0.0.0.0/0",
+      "auto_restart": "Автоматически перезапускать бота после выхода с ошибкой"
+    },
+    "save_changes": "Сохранить изменения"
   },
   "OrganizationProfile": {
     "title_bar": "Управление организацией",
@@ -307,11 +512,36 @@
     "by_strategy_description": "Распределение по стратегиям"
   },
   "CredentialsManager": {
-    "title": "Учетные Данные Бирж",
-    "description": "Управление API ключами для бирж",
-    "add_button": "Добавить Ключи",
-    "add_credentials_title": "Добавить Учетные Данные",
-    "add_credentials_description": "Введите ваши API ключи безопасно",
+    "title": "API Ключи",
+    "description": "Управление вашими API ключами",
+    "add_button": "Добавить API ключ",
+    "available_title": "Доступные API ключи",
+    "filters": {
+      "title": "Фильтры",
+      "reset": "Сбросить",
+      "status": "Статусы",
+      "add": "Добавить фильтры",
+      "apply": "Применить"
+    },
+    "table": {
+      "refresh": "Обновить",
+      "settings": "Настройка столбцов таблицы",
+      "search_placeholder": "Поиск",
+      "bulk_delete": "Удалить",
+      "rows_per_page": "Строк на страницу",
+      "columns": {
+        "name": "Имя",
+        "created": "Создан",
+        "updated": "Обновлен",
+        "exchange": "Биржа",
+        "key": "Ключ",
+        "secret": "Секретный Ключ",
+        "dashboard": "Дашборд",
+        "status": "Статус",
+        "actions": "Действия"
+      },
+      "status_active": "Активный"
+    },
     "validate_button": "Проверить",
     "delete_button": "Удалить"
   },
@@ -376,12 +606,41 @@
   },
   "Finance": {
     "title": "Финансы",
-    "description": "Управление балансом и оплата комиссий",
-    "total_balance": "Общий Баланс",
-    "refill": "Пополнить баланс",
-    "commission_paid": "Оплачено комиссии",
-    "commission_period": "В этом месяце",
-    "transactions_title": "История транзакций",
+    "description": "Обзор ваших финансов",
+    "total_balance": "Общий баланс",
+    "refill": "Пополнить",
+    "commission_paid": "Комиссия оплачена",
+    "commission_period": "За текущий месяц",
+    "transactions_title": "Последние транзакции",
     "no_transactions": "Транзакций не найдено"
+  },
+  "Wallets": {
+    "title": "Кошельки",
+    "description": "Управление вашими кошельками",
+    "add_button": "Создать новый кошелек",
+    "available_title": "Доступные кошельки",
+    "filters": {
+      "title": "Фильтры",
+      "add": "Добавить фильтры",
+      "apply": "Применить"
+    },
+    "table": {
+      "refresh": "Обновить",
+      "settings": "Настройка столбцов таблицы",
+      "search_placeholder": "Поиск",
+      "bulk_delete": "Удалить",
+      "rows_per_page": "Строк на страницу",
+      "columns": {
+        "name": "Имя",
+        "created": "Создан",
+        "updated": "Обновлен",
+        "exchange": "Биржа",
+        "currency": "Криптовалюта",
+        "type": "Тип",
+        "amount": "Сумма/Процент",
+        "actions": "Действия"
+      },
+      "type_fixed": "Сумма"
+    }
   }
 }

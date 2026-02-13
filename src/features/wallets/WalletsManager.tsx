@@ -4,17 +4,16 @@ import {
   ChevronRight,
   Maximize2,
   Pencil,
-  Play,
   Plus,
   RefreshCw,
   Search,
   Settings,
   Trash2,
+  Wallet,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -25,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import {
   Table,
   TableBody,
@@ -35,87 +33,79 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-type Credential = {
+type WalletData = {
   id: string;
   name: string;
   created: string;
   updated: string;
   exchange: string;
-  key: string;
-  secret: string;
-  onDashboard: boolean;
-  status: 'active' | 'inactive';
+  currencyIcon: string;
+  currencyName: string;
+  type: string;
+  amount: string;
+  amountColor?: string;
 };
 
-export const CredentialsManager = () => {
-  const t = useTranslations('CredentialsManager');
-  const [credentials, setCredentials] = useState<Credential[]>([]);
+export const WalletsManager = () => {
+  const t = useTranslations('Wallets');
+  const [wallets, setWallets] = useState<WalletData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [selectedExchange, setSelectedExchange] = useState<string | undefined>();
-
-  const loadCredentials = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/exchanges/credentials');
-      if (!response.ok) {
-        throw new Error('Failed to load credentials');
-      }
-      const data = await response.json();
-      // Mock data for display if API returns empty, to match screenshot
-      const mockData: Credential[] = [
-        {
-          id: '1',
-          name: 'FastAPI key',
-          created: '2023-09-03 05:32:53',
-          updated: '2023-09-03 05:32:53',
-          exchange: 'BINANCE-FUTURES COIN-margin',
-          key: 'NvKgSqXZUeN5pMWy32mbnnUG5sR2LesvCCGfPIXyqJeq1ry0KNfscZskSb32x1f',
-          secret: '*************************',
-          onDashboard: false,
-          status: 'active',
-        },
-        {
-          id: '2',
-          name: 'Main Binance',
-          created: '2023-08-15 12:10:00',
-          updated: '2023-08-15 12:10:00',
-          exchange: 'BINANCE',
-          key: 'aB4kL...9PqW',
-          secret: '*************************',
-          onDashboard: true,
-          status: 'active',
-        },
-        {
-          id: '3',
-          name: 'FastAPI key',
-          created: '2023-09-03 05:32:53',
-          updated: '2023-09-03 05:32:53',
-          exchange: 'BINANCE',
-          key: 'NvKgSqXZUeN5pMWy32mbnnUG5sR2LesvCCGfPIXyqJeq1ry0KNfscZskSb32x1f',
-          secret: '*************************',
-          onDashboard: false,
-          status: 'active',
-        },
-      ];
-      setCredentials(data.credentials?.length > 0 ? data.credentials : mockData);
-    } catch (error) {
-      console.error('Error loading credentials:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
-    loadCredentials();
-  }, []);
-
-  const handleDelete = async (id: string) => {
-    if (!confirm(t('delete_confirm') || 'Are you sure?')) {
-      // User cancelled, do nothing
-    }
-    // Delete logic...
-  };
+    // Mock data based on screenshot
+    const mockData: WalletData[] = [
+      {
+        id: '1',
+        name: 'maslovx',
+        created: '2022-01-17 10:11:09',
+        updated: '2023-09-03 18:02:04',
+        exchange: 'BINANCE',
+        currencyIcon: 'T',
+        currencyName: 'USDT',
+        type: t('table.type_fixed'),
+        amount: '2000',
+        amountColor: 'text-green-500',
+      },
+      {
+        id: '2',
+        name: 'maslovx Futures2',
+        created: '2022-01-29 05:59:16',
+        updated: '2023-09-06 06:38:31',
+        exchange: 'BINANCE-FUTURES USDT-margin',
+        currencyIcon: 'T',
+        currencyName: 'USDT',
+        type: t('table.type_fixed'),
+        amount: '100.10944122',
+        amountColor: 'text-green-500',
+      },
+      {
+        id: '3',
+        name: 'maslovx futures',
+        created: '2023-09-03 18:00:34',
+        updated: '2023-09-05 21:53:39',
+        exchange: 'BINANCE-FUTURES USDT-margin',
+        currencyIcon: 'T',
+        currencyName: 'USDT',
+        type: t('table.type_fixed'),
+        amount: '100',
+        amountColor: 'text-green-500',
+      },
+      {
+        id: '4',
+        name: 'maslovx futures ник рек',
+        created: '2023-09-04 23:21:39',
+        updated: '2023-09-05 21:54:14',
+        exchange: 'BINANCE-FUTURES USDT-margin',
+        currencyIcon: 'T',
+        currencyName: 'USDT',
+        type: t('table.type_fixed'),
+        amount: '100',
+        amountColor: 'text-green-500',
+      },
+    ];
+    setWallets(mockData);
+    setIsLoading(false);
+  }, [t]);
 
   if (isLoading) {
     return <div className="flex h-64 items-center justify-center">Loading...</div>;
@@ -123,13 +113,13 @@ export const CredentialsManager = () => {
 
   return (
     <div className="space-y-8">
-      {/* Add API Key Section */}
+      {/* Create Wallet Section */}
       <div className="flex aspect-[21/3] w-full flex-col items-center justify-center gap-4 rounded-xl border border-dashed bg-card/30">
         <div className="flex size-12 items-center justify-center rounded-lg border bg-background">
-          <Plus className="size-6 text-muted-foreground" />
+          <Wallet className="size-6 text-muted-foreground" />
         </div>
         <Button
-          onClick={() => setShowForm(true)}
+          type="button"
           className="h-10 bg-blue-600 px-6 hover:bg-blue-700"
         >
           {t('add_button')}
@@ -141,27 +131,10 @@ export const CredentialsManager = () => {
 
         {/* Filters Section */}
         <div className="space-y-6 rounded-xl border bg-card/30 p-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium">{t('filters.title')}</h3>
-            <button className="text-sm text-red-400 hover:underline">{t('filters.reset')}</button>
-          </div>
+          <h3 className="text-sm font-medium">{t('filters.title')}</h3>
 
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2 rounded-md border bg-background px-3 py-1.5">
-              <span className="text-xs text-muted-foreground">{t('filters.status')}</span>
-              <span className="flex size-5 items-center justify-center rounded bg-blue-100 text-[10px] font-bold text-blue-600">1</span>
-              <ChevronRight className="size-3 text-muted-foreground" />
-            </div>
-
-            <div className="flex size-8 cursor-pointer items-center justify-center rounded-md border bg-background text-red-500 hover:bg-accent">
-              <Trash2 className="size-4" />
-            </div>
-
-            <Button
-              type="button"
-              className="h-8 gap-2 border-dashed text-xs"
-              variant="outline"
-            >
+            <Button type="button" variant="outline" className="h-8 gap-2 border-dashed text-xs">
               <Plus className="size-3" />
               {t('filters.add')}
             </Button>
@@ -212,53 +185,45 @@ export const CredentialsManager = () => {
                 <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.created')}</TableHead>
                 <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.updated')}</TableHead>
                 <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.exchange')}</TableHead>
-                <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.key')}</TableHead>
-                <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.secret')}</TableHead>
-                <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.dashboard')}</TableHead>
-                <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.status')}</TableHead>
+                <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.currency')}</TableHead>
+                <TableHead className="text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.type')}</TableHead>
+                <TableHead className="text-right text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.amount')}</TableHead>
                 <TableHead className="text-right text-xs font-semibold uppercase text-muted-foreground">{t('table.columns.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {credentials.map(cred => (
-                <TableRow key={cred.id} className="hover:bg-accent/50">
+              {wallets.map(wallet => (
+                <TableRow key={wallet.id} className="hover:bg-accent/50">
                   <TableCell>
                     <Checkbox />
                   </TableCell>
-                  <TableCell className="text-xs font-medium">{cred.name}</TableCell>
-                  <TableCell className="whitespace-pre-line text-xs text-muted-foreground">{(cred.created || '').split(' ').join('\n')}</TableCell>
-                  <TableCell className="whitespace-pre-line text-xs text-muted-foreground">{(cred.updated || '').split(' ').join('\n')}</TableCell>
+                  <TableCell className="text-xs font-medium">{wallet.name}</TableCell>
+                  <TableCell className="whitespace-pre-line text-xs text-muted-foreground">{(wallet.created || '').split(' ').join('\n')}</TableCell>
+                  <TableCell className="whitespace-pre-line text-xs text-muted-foreground">{(wallet.updated || '').split(' ').join('\n')}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <div className="flex size-6 items-center justify-center rounded-full bg-yellow-400 text-[8px] font-bold text-white">B</div>
                       <span className="text-[10px] font-bold uppercase leading-tight text-gray-700">
-                        {(cred.exchange || '').split(' ').map((word, i) => (
-                          <div key={`${cred.id}-ex-${i}`}>{word}</div>
+                        {(wallet.exchange || '').split(' ').map((word, i) => (
+                          <div key={`${wallet.id}-ex-${i}`}>{word}</div>
                         ))}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className="max-w-[200px] truncate font-mono text-xs text-muted-foreground">{cred.key}</TableCell>
-                  <TableCell className="font-mono text-xs text-blue-500">
-                    <div className="flex items-center gap-1">
-                      {cred.secret}
-                      <span className="flex size-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white">?</span>
+                  <TableCell>
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="flex size-6 items-center justify-center rounded-full bg-green-500 text-[10px] font-bold text-white">
+                        {wallet.currencyIcon}
+                      </div>
+                      <span className="text-[10px] text-muted-foreground">{wallet.currencyName}</span>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Switch className="h-5 w-9" />
-                      <span className="text-[10px] font-bold text-muted-foreground">NO</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary" className="border-none bg-green-100 px-4 py-1.5 text-[10px] text-green-700 hover:bg-green-100">
-                      {t('table.status_active')}
-                    </Badge>
+                  <TableCell className="text-xs text-muted-foreground">{wallet.type}</TableCell>
+                  <TableCell className={`text-right font-mono text-xs ${wallet.amountColor}`}>
+                    {wallet.amount}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-3 text-blue-500">
-                      <Play className="size-4 cursor-pointer" />
                       <Pencil className="size-4 cursor-pointer" />
                       <Trash2 className="size-4 cursor-pointer text-red-500" />
                     </div>
@@ -271,7 +236,7 @@ export const CredentialsManager = () => {
 
         {/* Bulk Actions and Pagination */}
         <div className="flex flex-wrap items-center justify-between gap-4 pt-4">
-          <Button variant="outline" className="h-10 border-none bg-blue-200 px-6 text-blue-700 hover:bg-blue-300">
+          <Button type="button" variant="outline" className="h-10 border-none bg-blue-200 px-6 text-blue-700 hover:bg-blue-300">
             {t('table.bulk_delete')}
           </Button>
 

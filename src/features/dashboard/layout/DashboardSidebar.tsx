@@ -1,6 +1,6 @@
 'use client';
 
-import { BookOpen, Bot, LayoutDashboard, LineChart, Menu, ShoppingCart, User, Users, Wallet } from 'lucide-react';
+import { BookOpen, Bot, Key, LayoutDashboard, LineChart, Menu, ShoppingCart, User, Users, Wallet } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -37,9 +37,14 @@ export const DashboardSidebar = () => {
       label: t('statistics'),
     },
     {
-      href: '/dashboard/finance',
+      href: '/dashboard/wallets',
       icon: Wallet,
-      label: t('finance'),
+      label: t('wallets'),
+    },
+    {
+      href: '/dashboard/exchanges',
+      icon: Key,
+      label: t('api_keys'),
     },
     {
       href: '/dashboard/referral',
